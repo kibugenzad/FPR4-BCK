@@ -1,28 +1,31 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Main BloodDonationCampaign schema
-const BloodDonationCampaignSchema = new Schema({
-  // Future Date
-  campaignDate: { type: Date, required: true, min: Date.now },
+const BloodDonationCampaignSchema = new Schema(
+  {
+    available: { type: Boolean, default: true },
+    campaignDate: { type: Date, required: true, min: Date.now },
+    estimatedCollection: { type: Number, required: true },
+    actualCollection: { type: Number, default: 0 },
+    bloodCenter: {
+      type: Schema.Types.ObjectId,
+      ref: "BloodCenter",
+      required: true,
+    },
+    bloodCenterSite: {
+      type: Schema.Types.ObjectId,
+      ref: "BloodCenterSite",
+      required: true,
+    },
+    isActive: { type: Boolean, default: true },
+  },
+  {
+    timestamps: true, // Enables automatic creation of createdAt and updatedAt fields
+  }
+);
 
-  // Estimated Collection (in units, for example)
-  estimatedCollection: { type: Number, required: true },
-
-  // Actual Collection (in units)
-  actualCollection: { type: Number, default: 0 },
-
-  // ID linking to the Blood Center schema
-  bloodCenter: { type: Schema.Types.ObjectId, ref: 'BloodCenter', required: true },
-
-  // ID linking to the Blood Center Site schema
-  bloodCenterSite: { type: Schema.Types.ObjectId, ref: 'BloodCenterSite', required: true },
-
-  // Additional Fields
-  isActive: { type: Boolean, default: true },
-  
-}, {
-  timestamps: true  // Enables automatic creation of createdAt and updatedAt fields
-});
-
-module.exports = mongoose.model('BloodDonationCampaign', BloodDonationCampaignSchema);
+module.exports = mongoose.model(
+  "BloodDonationCampaign",
+  BloodDonationCampaignSchema
+);
