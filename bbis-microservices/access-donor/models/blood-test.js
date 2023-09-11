@@ -1,5 +1,70 @@
-// should have all the results to be taken and info to insure that collected blood is fit to be given to someone else
-// should be linked to site
-// should be linked to donation
-// should be linked to accounts for approval
-// should have approval levels
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+const BloodTestSchema = new Schema(
+  {
+    // Blood Test Results
+    hemoglobin: {
+      type: Number,
+      required: true,
+    },
+    bloodGroup: {
+      type: String,
+      required: true,
+      enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+    },
+    hepatitisB: {
+      type: Boolean,
+      required: true,
+    },
+    hepatitisC: {
+      type: Boolean,
+      required: true,
+    },
+    hiv: {
+      type: Boolean,
+      required: true,
+    },
+    syphilis: {
+      type: Boolean,
+      required: true,
+    },
+    // Link to Site Schema
+    site: {
+      type: Schema.Types.ObjectId,
+      ref: "Site",
+      required: true,
+    },
+    // Link to Donation Schema
+    donation: {
+      type: Schema.Types.ObjectId,
+      ref: "Donation",
+      required: true,
+    },
+    // Approval - Can have multiple levels
+    approvals: [
+      {
+        account: {
+          type: Schema.Types.ObjectId,
+          ref: "Account",
+          required: true,
+        },
+        level: {
+          type: Number,
+          required: true,
+        },
+        approved: {
+          type: Boolean,
+          default: false,
+        },
+        approvedAt: Date,
+      },
+    ],
+    // Other metadata like timestamps
+  },
+  {
+    timestamps: true,
+  }
+);
+
+module.exports = mongoose.model("BloodTest", BloodTestSchema);
