@@ -10,7 +10,7 @@ const Services = require("../services");
 /*
 Controller
 */
-class PSRPEvent {
+class bbisEvent {
     static performAction(action, req, serviceName) {
         // Validate the service name
         const Service = Services[serviceName];
@@ -39,4 +39,4 @@ class PSRPEvent {
     }
 }
 
-module.exports = PSRPEvent;
+module.exports = bbisEvent;
