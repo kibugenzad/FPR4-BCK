@@ -14,16 +14,10 @@ const bloodInfoSchema = new Schema({
 
 // Main BloodDonation schema
 const BloodDonationSchema = new Schema({
-  // ID linking to the Donor schema
+  available: { type: Boolean, default: true },
   donor: { type: Schema.Types.ObjectId, ref: 'Donor', required: true },
-
-  // Blood Information Object
   bloodInfo: { type: bloodInfoSchema, required: true },
-
-  // ID linking to the Site schema
   site: { type: Schema.Types.ObjectId, ref: 'Site', required: true },
-
-  // Additional Fields
   isActive: { type: Boolean, default: true },
   collectedBy: { type: String, required: true }, // Name or ID of the person who collected the blood
 
