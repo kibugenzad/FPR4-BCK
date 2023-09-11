@@ -1,4 +1,4 @@
-const Model = require("../models/blood-donation-commitee");
+const Model = require("../models/blood-donation-committee");
 const config = require("../commons/config/app-config");
 const { 
     filterDates,
