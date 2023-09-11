@@ -8,25 +8,18 @@ const addressSchema = new Schema({
   sector: { type: String, required: true },
   cell: { type: String, required: true },
   village: { type: String, required: true },
+  latitude: { type: Number, required: true },
+  longitude: { type: Number, required: true },
 }, {
   _id: false // This line ensures that no additional ID is created for this sub-document
 });
 
 // Main BloodCenter schema
 const BloodCenterSchema = new Schema({
-  // ID linking to the Position schema for blood center leader
   centerLeader: { type: Schema.Types.ObjectId, ref: 'Position', required: true },
-
-  // Center Name
   name: { type: String, required: true },
-
-  // Center Code
   code: { type: String, required: true, unique: true },
-
-  // Address Object
   address: { type: addressSchema, required: true },
-
-  // Additional Fields
   contactNumber: { type: String, required: true },
   email: { type: String, required: true },
   isActive: { type: Boolean, default: true },
