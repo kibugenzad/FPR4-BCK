@@ -5,7 +5,7 @@ per route
 const express = require("express");
 const router = express.Router();
 const { handleRequest } = require("../commons/utils/handler");
-const Controller = require("../controller/psrp-event");
+const Controller = require("../controller/bbis-event");
 
 // Set main api URL and service name
 const apiUrl = "/access";
