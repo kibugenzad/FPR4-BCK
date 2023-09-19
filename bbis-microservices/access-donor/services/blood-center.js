@@ -49,4 +49,4 @@ class BloodCenter {
   }
 }
 
-module.exports = Position;
+module.exports = BloodCenter;
