@@ -32,6 +32,9 @@ class BloodDonation {
     const query = this.buildQuery(req.body);
 
     return Model.find(query)
+      .populate({ path: "bloodInfo" })
+      .populate({ path: "center" })
+      .populate({ path: "centerSite" })
       .sort({ date: -1 })
       .limit(limit)
       .skip(page ? limit * (page - 1) : 0);
