@@ -52,4 +52,4 @@ class BloodTest {
   }
 }
 
-module.exports = Position;
+module.exports = BloodTest;
