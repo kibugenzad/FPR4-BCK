@@ -52,4 +52,4 @@ class Hospital {
   }
 }
 
-module.exports = Position;
+module.exports = Hospital;
