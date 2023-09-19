@@ -9,7 +9,8 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY;
 // Create JWT token for authentication
 const token = jwt.sign({ some: "data" }, PRIVATE_KEY, { algorithm: "RS256" });
 
-const microserviceBaseUrl = process.env.ACCESS_MICROSERVICE_URL || `${config.accessMicroserviceUrl}/api/access/accessRole`;
+const microserviceBaseUrl =
+  process.env.ACCESS_MICROSERVICE_URL || `${config.accessMicroserviceUrl}`;
 const gatewayAPIUrl = "/access/accessRole";
 
 const makeRequest = async (method, req, res) => {
@@ -21,8 +22,8 @@ const makeRequest = async (method, req, res) => {
       data: req.body,
       params: req.query,
       headers: {
-        "Authorization": `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     res.status(response.status).json(response.data);
   } catch (error) {
