@@ -52,4 +52,4 @@ class BloodDonationCampaign {
   }
 }
 
-module.exports = Position;
+module.exports = BloodDonationCampaign;
