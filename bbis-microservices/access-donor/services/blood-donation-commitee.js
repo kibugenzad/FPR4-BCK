@@ -47,4 +47,4 @@ class BloodDonationCommittee {
   }
 }
 
-module.exports = Position;
+module.exports = BloodDonationCommittee;
