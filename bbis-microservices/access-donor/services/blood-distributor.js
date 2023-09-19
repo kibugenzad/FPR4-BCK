@@ -47,4 +47,4 @@ class BloodDistributor {
   }
 }
 
-module.exports = Position;
+module.exports = BloodDistributor;
