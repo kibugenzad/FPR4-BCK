@@ -1,50 +1,49 @@
 const Model = require("../models/department");
 const config = require("../commons/config/app-config");
-const { 
-    filterDates,
-    filterIds,
-    processExactQuery 
+const {
+  filterDates,
+  filterIds,
+  processExactQuery,
 } = require("../commons/utils/general-filters");
 
-
 class Department {
-    static buildQuery(filters) {
-        let query = { available: true };  // enforce availability
-        query = filterDates(query, filters);
-        query = filterIds(query, filters);
+  static buildQuery(filters) {
+    let query = { available: true }; // enforce availability
+    query = filterDates(query, filters);
+    query = filterIds(query, filters);
 
-        const exactFields = ["externalID", "name"];
-        
-        exactFields.forEach(field => {
-            processExactQuery(query, field, filters[field]);
-        });
+    const exactFields = ["externalID", "name"];
 
-        return query;
-    }
+    exactFields.forEach((field) => {
+      processExactQuery(query, field, filters[field]);
+    });
 
-    static get(req) {
-        const { limit = config.limit, page } = req.params;
-        const query = this.buildQuery(req.params);
+    return query;
+  }
 
-        return Model.find(query)
-            .sort({ date: -1 })
-            .limit(limit)
-            .skip(page ? limit * (page - 1) : 0);
-    }
+  static get(req) {
+    const { limit = config.limit, page } = req.body;
+    const query = this.buildQuery(req.body);
 
-    static create(req) {
-        return Model.create(req.body);
-    }
+    return Model.find(query)
+      .sort({ date: -1 })
+      .limit(limit)
+      .skip(page ? limit * (page - 1) : 0);
+  }
 
-    static update(req) {
-        const { id } = req.params;
-        return Model.findByIdAndUpdate({ _id: id }, req.body, { new: true });
-    }
+  static create(req) {
+    return Model.create(req.body);
+  }
 
-    static delete(req) {
-        const { id } = req.params;
-        return Model.remove({ _id: id });
-    }
+  static update(req) {
+    const { id } = req.body;
+    return Model.findByIdAndUpdate({ _id: id }, req.body, { new: true });
+  }
+
+  static delete(req) {
+    const { id } = req.body;
+    return Model.remove({ _id: id });
+  }
 }
 
 module.exports = Department;
