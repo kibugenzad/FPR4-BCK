@@ -8,12 +8,12 @@ const BloodDonationCampaignSchema = new Schema(
     campaignDate: { type: Date, required: true, min: Date.now },
     estimatedCollection: { type: Number, required: true },
     actualCollection: { type: Number, default: 0 },
-    bloodCenter: {
+    center: {
       type: Schema.Types.ObjectId,
       ref: "BloodCenter",
       required: true,
     },
-    bloodCenterSite: {
+    centerSite: {
       type: Schema.Types.ObjectId,
       ref: "BloodCenterSite",
       required: true,
