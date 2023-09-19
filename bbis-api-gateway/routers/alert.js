@@ -1,40 +1,24 @@
-require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
-const jwt = require("jsonwebtoken");
+const { makeRequest } = require("../commons/utils/handler");
+const config = require("../commons/config/app-config");
 
-const PRIVATE_KEY = process.env.PRIVATE_KEY;
-
-// Create JWT token for authentication
-const token = jwt.sign({ some: "data" }, PRIVATE_KEY, { algorithm: "RS256" });
-
-const microserviceBaseUrl = process.env.event_MICROSERVICE_URL || `${config.eventMicroserviceUrl}/api/event/alert`;
+const microserviceBaseUrl =
+  process.env.ACCESS_MICROSERVICE_URL || `${config.accessMicroserviceUrl}`;
 const gatewayAPIUrl = "/event/alert";
 
-const makeRequest = async (method, req, res) => {
-  const url = `${microserviceBaseUrl}${req.url.replace(gatewayAPIUrl, "")}`;
-  try {
-    const response = await axios({
-      method,
-      url,
-      data: req.body,
-      params: req.query,
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    });
-    res.status(response.status).json(response.data);
-  } catch (error) {
-    const status = error.response?.status || 500;
-    const data = error.response?.data || {};
-    res.status(status).json(data);
-  }
-};
-
-router.get(gatewayAPIUrl, (req, res) => makeRequest("get", req, res));
-router.post(gatewayAPIUrl, (req, res) => makeRequest("post", req, res));
-router.put(gatewayAPIUrl, (req, res) => makeRequest("put", req, res));
-router.delete(gatewayAPIUrl, (req, res) => makeRequest("delete", req, res));
+router.get(gatewayAPIUrl, (req, res) =>
+  makeRequest(microserviceBaseUrl, gatewayAPIUrl, "get", req, res)
+);
+router.post(gatewayAPIUrl, (req, res) =>
+  makeRequest(microserviceBaseUrl, gatewayAPIUrl, "post", req, res)
+);
+router.put(gatewayAPIUrl, (req, res) =>
+  makeRequest(microserviceBaseUrl, gatewayAPIUrl, "put", req, res)
+);
+router.delete(gatewayAPIUrl, (req, res) =>
+  makeRequest(microserviceBaseUrl, gatewayAPIUrl, "delete", req, res)
+);
 
 module.exports = router;
