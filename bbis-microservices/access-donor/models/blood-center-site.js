@@ -20,12 +20,12 @@ const BloodCenterSiteSchema = new Schema(
   {
     center: {
       type: Schema.Types.ObjectId,
-      ref: "Center",
+      ref: "BloodCenter",
       required: true,
     },
     committeeLeader: {
       type: Schema.Types.ObjectId,
-      ref: "Committee",
+      ref: "BloodDonationCommittee",
       required: true,
     },
     name: {
