@@ -7,7 +7,7 @@ const {
   processExactQuery,
 } = require("../commons/utils/general-filters");
 
-class Position {
+class BloodDonationCampaign {
   static buildQuery(filters) {
     let query = { available: true }; // enforce availability
     query = filterDates(query, filters);
