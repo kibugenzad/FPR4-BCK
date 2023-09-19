@@ -27,6 +27,9 @@ class BloodRequest {
     const query = this.buildQuery(req.body);
 
     return Model.find(query)
+      .populate({ path: "approvals.account" })
+      .populate({ path: "linkedEntity.distributor" })
+      .populate({ path: "donor" })
       .sort({ date: -1 })
       .limit(limit)
       .skip(page ? limit * (page - 1) : 0);
