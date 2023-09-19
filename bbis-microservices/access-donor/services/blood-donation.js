@@ -52,4 +52,4 @@ class BloodDonation {
   }
 }
 
-module.exports = Position;
+module.exports = BloodDonation;
