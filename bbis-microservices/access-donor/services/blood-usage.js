@@ -52,4 +52,4 @@ class BloodUsage {
   }
 }
 
-module.exports = Position;
+module.exports = BloodUsage;
