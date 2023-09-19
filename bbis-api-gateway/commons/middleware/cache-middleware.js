@@ -1,14 +1,14 @@
-const axios = require('axios');
-const crypto = require('crypto');
-const appConfig = require('../config/app-config');
+const axios = require("axios");
+const crypto = require("crypto");
+const appConfig = require("../config/app-config");
 const cacheServiceURL = appConfig.cacheServiceURL; // Replace with your cache service URL
 
 const hashString = (str) => {
-  return crypto.createHash('sha256').update(str).digest('hex');
+  return crypto.createHash("sha256").update(str).digest("hex");
 };
 
 const generateCacheKey = (req) => {
-  const paramsString = JSON.stringify(req.params);
+  const paramsString = JSON.stringify(req.body);
   const key = hashString(paramsString);
   return key;
 };
@@ -19,7 +19,7 @@ const cacheMiddleware = {
     const category = req.originalUrl;
     try {
       const response = await axios.get(`${cacheServiceURL}/${key}`, {
-        params: { category }
+        params: { category },
       });
       res.send(response.data);
     } catch (error) {
@@ -33,7 +33,7 @@ const cacheMiddleware = {
     const data = { ...req.body, category };
     try {
       await axios.post(`${cacheServiceURL}/${key}`, data);
-      res.status(201).send('Cached successfully');
+      res.status(201).send("Cached successfully");
     } catch (error) {
       next(error);
     }
@@ -44,9 +44,9 @@ const cacheMiddleware = {
     const category = req.originalUrl;
     try {
       await axios.delete(`${cacheServiceURL}/${key}`, {
-        params: { category }
+        params: { category },
       });
-      res.status(200).send('Cache deleted successfully');
+      res.status(200).send("Cache deleted successfully");
     } catch (error) {
       next(error);
     }
