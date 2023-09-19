@@ -23,7 +23,7 @@ const BloodRequestSchema = new Schema(
     linkedEntity: {
       distributor: {
         type: Schema.Types.ObjectId,
-        ref: "Distributor",
+        ref: "BloodDistributor",
         required: false,
       },
       hospital: {
