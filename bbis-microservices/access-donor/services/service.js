@@ -32,6 +32,9 @@ class Service {
     const query = this.buildQuery(req.body);
 
     return Model.find(query)
+      .populate({ path: "approver.position" })
+      .populate({ path: "category" })
+      .populate({ path: "questionnaire" })
       .sort({ date: -1 })
       .limit(limit)
       .skip(page ? limit * (page - 1) : 0);
