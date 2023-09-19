@@ -52,4 +52,4 @@ class Donor {
   }
 }
 
-module.exports = Position;
+module.exports = Donor;
