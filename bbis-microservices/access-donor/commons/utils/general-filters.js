@@ -46,15 +46,16 @@ const generalFilters = {
 
   processArrayQuery: (query, key, value) => {
     if (value) {
-        query[key] = { "$in": value };
+      query[key] = { $in: value };
     }
   },
-  
+
   processExactQuery: (query, key, value) => {
-    if (value) {
-        query[key] = value;
+    if (value !== null && value !== undefined) {
+      // allow false, 0, etc.
+      query[key] = value;
     }
-  }
+  },
 };
 
 module.exports = generalFilters;
