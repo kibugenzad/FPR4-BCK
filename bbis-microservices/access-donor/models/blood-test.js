@@ -30,15 +30,15 @@ const BloodTestSchema = new Schema(
       required: true,
     },
     // Link to Site Schema
-    site: {
+    centerSite: {
       type: Schema.Types.ObjectId,
-      ref: "Site",
+      ref: "CenterSite",
       required: true,
     },
     // Link to Donation Schema
     donation: {
       type: Schema.Types.ObjectId,
-      ref: "Donation",
+      ref: "BloodDonation",
       required: true,
     },
     // Approval - Can have multiple levels
