@@ -9,13 +9,17 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const formidable = require("express-formidable");
 const socketio = require("socket.io");
-const { authenticateGateway } = require("./commons/middlewares/authentication");
-const appConfig = require("./config");
-const routes = require("./routers");  // Import all routes as a single object
+const { authenticateGateway } = require("./commons/middleware/authentication");
+const { parseSpecialTypes } = require("./commons/middleware/parseTypes");
+const appConfig = require("./commons/config/app-config");
+const routes = require("./routers"); // Import all routes as a single object
+
+// db
+require("./commons/config/db-config");
 
 // Initialize
 const app = express();
-const PORT = process.env.PORT || 5397;
+const PORT = process.env.PORT || 3397;
 const apiPrefix = appConfig.apiPrefix;
 
 // Middlewares
@@ -37,21 +41,24 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-    const contentType = req.headers["content-type"] || "";
-    const hasJsonContent = contentType.includes("application/json");
+  const contentType = req.headers["content-type"] || "";
+  const hasJsonContent = contentType.includes("application/json");
 
-    if (!hasJsonContent && !(req.body && Object.keys(req.body).length > 0)) {
-        formidable()(req, res, next);
-    } else {
-        next();
-    }
+  if (!hasJsonContent && !(req.body && Object.keys(req.body).length > 0)) {
+    formidable()(req, res, next);
+  } else {
+    next();
+  }
 });
 
 // Authentication
 app.use(authenticateGateway);
 
+// parseTypes
+app.use(parseSpecialTypes);
+
 // Routes
-Object.keys(routes).forEach(route => {
+Object.keys(routes).forEach((route) => {
   app.use(apiPrefix, routes[route]);
 });
 
@@ -72,7 +79,7 @@ app.set("socketio", io);
 
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
-  socket.on("user_info", data => {
+  socket.on("user_info", (data) => {
     console.log(`User connected id: ${data.id}`);
   });
   socket.on("disconnect", () => {
