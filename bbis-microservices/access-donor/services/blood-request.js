@@ -47,4 +47,4 @@ class BloodRequest {
   }
 }
 
-module.exports = Position;
+module.exports = BloodRequest;
