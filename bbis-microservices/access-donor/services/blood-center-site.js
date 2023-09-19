@@ -7,7 +7,7 @@ const {
   processExactQuery,
 } = require("../commons/utils/general-filters");
 
-class Position {
+class BloodCenterSite {
   static buildQuery(filters) {
     let query = { available: true }; // enforce availability
     query = filterDates(query, filters);
@@ -32,6 +32,8 @@ class Position {
     const query = this.buildQuery(req.body);
 
     return Model.find(query)
+      .populate({ path: "center" })
+      .populate({ path: "committeeLeader" })
       .sort({ date: -1 })
       .limit(limit)
       .skip(page ? limit * (page - 1) : 0);
@@ -52,4 +54,4 @@ class Position {
   }
 }
 
-module.exports = Position;
+module.exports = BloodCenterSite;
