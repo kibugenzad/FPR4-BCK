@@ -8,7 +8,16 @@ const BloodDonationCommitteeSchema = new Schema(
     name: { type: String, required: true },
     phoneNumber: { type: String, required: true },
     email: { type: String, required: true },
-    site: { type: Schema.Types.ObjectId, ref: "Site", required: true },
+    center: {
+      type: Schema.Types.ObjectId,
+      ref: "CenterSite",
+      required: true,
+    },
+    centerSite: {
+      type: Schema.Types.ObjectId,
+      ref: "BloodCenterSite",
+      required: true,
+    },
     isActive: { type: Boolean, default: true },
   },
   {
