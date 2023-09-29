@@ -8,20 +8,30 @@ const PUBLIC_KEY = fs.readFileSync(publicKeyPath, "utf8");
 const KEY_PASSPHRASE = process.env.KEY_PASSPHRASE || "";
 
 const authenticateGateway = async (req, res, next) => {
+  const isAuthUrl = appConfig.authUrls.includes(req.path.toLowerCase());
+
   const bearerHeader = req.headers.Authorization || req.headers.authorization;
+  const hasBearerHeader =
+    (typeof bearerHeader !== "undefined" &&
+      !bearerHeader.includes("undefined") &&
+      bearerHeader !== "") ||
+    (req.method !== "GET" && !isAuthUrl);
 
   // Check if the URL is in the whitelist
-  console.log({ reqPath: req.path });
-  console.log("******_____________________________");
   const isWhitelisted = appConfig.whitelistedUrls.includes(
     req.path.toLowerCase()
   );
 
-  console.log({ isWhitelisted });
+  console.log({
+    path: req.path.toLowerCase(),
+    bearerHeader,
+    hasBearerHeader,
+    isWhitelisted,
+  });
 
   // Validate token if URL is not whitelisted or if a token is provided.
-  if (!isWhitelisted) {
-    if (typeof bearerHeader === "undefined" || bearerHeader === "") {
+  if (!isWhitelisted || hasBearerHeader) {
+    if (!hasBearerHeader) {
       return res.status(403).json({ error: "Forbidden: No Token Provided" });
     }
 
