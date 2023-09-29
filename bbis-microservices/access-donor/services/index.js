@@ -2,48 +2,30 @@
 all services
 */
 
-const AccessRole = require("./access-role"),
-Account = require("./account"),
-BloodCenterSite = require("./blood-center-site"),
-BloodCenter = require("./blood-center"),
-BloodDistributor = require("./blood-distributor"),
-BloodDonationCampaign = require("./blood-campaign"),
-BloodDonationCommittee = require("./blood-donation-committee"),
-BloodDonation = require("./blood-donation"),
-BloodRequest = require("./blood-request"),
-BloodTest = require("./blood-test"),
-BloodUsage = require("./blood-usage"),
-Donor = require("./donor"),
-Hospital = require("./hospital"),
-ServiceCategory = require("./service-category"),
-Department = require("./department"),
-Position = require("./position"),
-BloodRequest = require("./request"),
-Service = require("./service"),
-SuperAdmin = require("./super-admin"),
-SuperUser = require("./super-user"),
-User = require("./user");
+const fs = require("fs");
+const path = require("path");
 
-modules.exports = {
-    AccessRole,
-    Account,
-    BloodCenterSite,
-    BloodCenter,
-    BloodDistributor,
-    BloodDonationCampaign,
-    BloodDonationCommittee,
-    BloodDonation,
-    BloodRequest,
-    BloodTest,
-    BloodUsage,
-    Donor,
-    Hospital,
-    ServiceCategory,
-    Department,
-    Position,
-    Request,
-    Service,
-    SuperAdmin,
-    SuperUser,
-    User,
-}
+const servicesPath = __dirname;
+
+// Read all files in the directory
+const files = fs.readdirSync(servicesPath);
+
+// Import each service and add it to the exports object if it's a function
+const services = {};
+files.forEach((file) => {
+  // Filter out the current file (index.js) and any non-JavaScript files
+  if (file !== "index.js" && file.endsWith(".js")) {
+    const serviceName = path.basename(file, ".js"); // remove the file extension to get the service name
+    const service = require(`./${serviceName}`);
+
+    // Check if the imported module is a function (middleware)
+    if (typeof service === "function") {
+      services[serviceName] = service;
+      console.log("Added service:", serviceName);
+    } else {
+      console.log("Skipping Non-function:", serviceName);
+    }
+  }
+});
+
+module.exports = services;
