@@ -18,6 +18,12 @@ const PositionSchema = new Schema(
       unique: true,
       trim: true,
     },
+    employeeId: {
+      type: String,
+      required: [true, "name field is required"],
+      unique: true,
+      trim: true,
+    },
     description: {
       type: String,
       trim: true,
