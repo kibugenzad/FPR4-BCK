@@ -137,14 +137,12 @@ const makeRequestForMultipleRoles = async (
 const makeRequestAndNotify = async (
   microserviceBaseUrl,
   gatewayAPIUrl,
-  microserviceBaseUrlNotify,
-  notifyAPIUrl,
+  notificationConfigs, // Array of objects with { baseUrl, apiUrl }
   method,
   req,
   res
 ) => {
   const url = `${microserviceBaseUrl}${gatewayAPIUrl}`;
-  const notifyUrl = `${microserviceBaseUrlNotify}${notifyAPIUrl}`;
 
   let dataToSend = { ...req.body, ...req.fields };
   if (dataToSend.questionnaireAnswer || req.files) {
@@ -160,22 +158,31 @@ const makeRequestAndNotify = async (
     if (
       response.status === 200 &&
       response.data.status !== "error" &&
-      notifyAPIUrl
+      notificationConfigs.length
     ) {
-      const notifyOptions = getRequestOptions(
-        method,
-        notifyUrl,
-        response.data,
-        req
-      );
-      const responseNotify = await makeAxiosRequest(notifyOptions);
+      let notificationSent = false; // To keep track if we've sent at least one successful notification
 
-      if (
-        responseNotify.status === 200 &&
-        responseNotify.data.status !== "error"
-      ) {
+      for (let config of notificationConfigs) {
+        const notifyUrl = `${config.baseUrl}${config.apiUrl}`;
+        const notifyOptions = getRequestOptions(
+          method,
+          notifyUrl,
+          response.data,
+          req
+        );
+        const responseNotify = await makeAxiosRequest(notifyOptions);
+
+        if (
+          responseNotify.status === 200 &&
+          responseNotify.data.status !== "error"
+        ) {
+          notificationSent = true;
+        }
+      }
+
+      if (notificationSent) {
         let io = req.app.get("socketio");
-        io.emit("notification", responseNotify.data);
+        io.emit("notification", response.data); // Emit socket notification once after all the notifications
       }
     }
   } catch (error) {
