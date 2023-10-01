@@ -137,13 +137,14 @@ const makeRequestForMultipleRoles = async (
 const makeRequestAndNotify = async (
   microserviceBaseUrl,
   gatewayAPIUrl,
+  microserviceBaseUrlNotify,
   notifyAPIUrl,
   method,
   req,
   res
 ) => {
   const url = `${microserviceBaseUrl}${gatewayAPIUrl}`;
-  const notifyUrl = `${microserviceBaseUrl}${notifyAPIUrl}`;
+  const notifyUrl = `${microserviceBaseUrlNotify}${notifyAPIUrl}`;
 
   let dataToSend = { ...req.body, ...req.fields };
   if (dataToSend.questionnaireAnswer || req.files) {
