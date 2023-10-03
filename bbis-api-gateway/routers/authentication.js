@@ -22,17 +22,29 @@ router.post(`${gatewayAPIUrl}/admin`, (req, res) =>
 );
 
 router.post(`${gatewayAPIUrl}/account`, (req, res) =>
-  makeRequest(microserviceBaseUrl, gatewayAPIUrl, "post", req, res)
+  makeRequest(microserviceBaseUrl, `${gatewayAPIUrl}/account`, "post", req, res)
 );
 
 router.post(`${gatewayAPIUrl}/user`, (req, res) =>
-  makeRequest(microserviceBaseUrl, gatewayAPIUrl, "post", req, res)
+  makeRequest(microserviceBaseUrl, `${gatewayAPIUrl}/user`, "post", req, res)
 );
 router.post(`${gatewayAPIUrl}/superUser`, (req, res) =>
-  makeRequest(microserviceBaseUrl, gatewayAPIUrl, "post", req, res)
+  makeRequest(
+    microserviceBaseUrl,
+    `${gatewayAPIUrl}/superUser`,
+    "post",
+    req,
+    res
+  )
 );
 router.post(`${gatewayAPIUrl}/superAdmin`, (req, res) =>
-  makeRequest(microserviceBaseUrl, gatewayAPIUrl, "post", req, res)
+  makeRequest(
+    microserviceBaseUrl,
+    `${gatewayAPIUrl}/superAdmin`,
+    "post",
+    req,
+    res
+  )
 );
 
 module.exports = router;
