@@ -25,11 +25,11 @@ class BBISAccess {
     return this.performAction("get", req, serviceName);
   }
 
-  static create(req, serviceName) {
+  static post(req, serviceName) {
     return this.performAction("create", req, serviceName);
   }
 
-  static update(req, serviceName) {
+  static put(req, serviceName) {
     return this.performAction("update", req, serviceName);
   }
 
