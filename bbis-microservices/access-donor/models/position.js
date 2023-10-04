@@ -42,6 +42,8 @@ const PositionSchema = new Schema(
   }
 );
 
+PositionSchema.index({ name: 1, department: 1 }, { unique: true });
+
 // Create the model based on the schema
 const Position = mongoose.model("Position", PositionSchema);
 
