@@ -32,6 +32,7 @@ class PreDonationAssessment {
     const query = this.buildQuery(req.body);
 
     return Model.find(query)
+      .populate({ path: "questionnaire" })
       .populate({ path: "assessedBy" })
       .sort({ date: -1 })
       .limit(limit)
