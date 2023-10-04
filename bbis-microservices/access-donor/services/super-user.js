@@ -57,7 +57,7 @@ class SuperUser {
   static update(req) {
     const id = req.params.id;
     const data = req.body; // Assuming you meant to update with body data
-    return Model.findByIdAndUpdate({ _id: id }, data, { new: true });
+    return Model.findByIdAndUpdate(id, data, { new: true });
   }
 
   static delete(req) {
