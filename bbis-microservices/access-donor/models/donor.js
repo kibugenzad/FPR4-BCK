@@ -19,10 +19,14 @@ const DonorSchema = new Schema(
       default: true,
     },
     center: {
-      type: String,
-      required: [true, "center field is required"],
-      trim: true,
-      lowercase: true,
+      type: Schema.Types.ObjectId,
+      ref: "BloodCenter",
+      required: true,
+    },
+    centerSite: {
+      type: Schema.Types.ObjectId,
+      ref: "BloodCenterSite",
+      required: true,
     },
     email: {
       type: String,
