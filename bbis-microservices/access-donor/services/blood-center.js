@@ -26,12 +26,14 @@ class BloodCenter {
     const { limit = config.limit, page } = req.body;
     const query = this.buildQuery(req.body);
 
-    return Model.find(query)
-      .populate({ path: "centerLeader" })
-      .populate({ path: "address" })
-      .sort({ date: -1 })
-      .limit(limit)
-      .skip(page ? limit * (page - 1) : 0);
+    return (
+      Model.find(query)
+        .populate({ path: "centerLeader" })
+        // .populate({ path: "address" })
+        .sort({ date: -1 })
+        .limit(limit)
+        .skip(page ? limit * (page - 1) : 0)
+    );
   }
 
   static create(req) {
@@ -40,7 +42,7 @@ class BloodCenter {
 
   static update(req) {
     const { id } = req.body;
-    return Model.findByIdAndUpdate({ _id: id }, req.body, { new: true });
+    return Model.findByIdAndUpdate(id, req.body, { new: true });
   }
 
   static delete(req) {
