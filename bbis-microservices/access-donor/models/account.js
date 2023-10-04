@@ -35,9 +35,9 @@ const AccountSchema = new Schema(
       trim: true,
       lowercase: true,
     },
-    ippisNumber: {
+    employeeId: {
       type: String,
-      required: [true, "ippisNumber field is required"],
+      required: [true, "employeeId field is required"],
       unique: true,
       trim: true,
     },
