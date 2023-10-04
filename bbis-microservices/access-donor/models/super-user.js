@@ -7,53 +7,57 @@ const Schema = mongoose.Schema;
 // Create account schema
 // Define the super-user schema
 const SuperUserSchema = new Schema(
-    {
-        accesRole: [{
-            type: Schema.Types.ObjectId,
-            ref: "accessRole"
-        }],
-        available: {
-            type: Boolean,
-            default: true
-        },
-        email: {
-            type: String,
-            required: [true, "Email field is required"],
-            unique: true,
-            trim: true,
-            lowercase: true,
-        },
-        ippisNumber:{
-            type: String,
-            required: [true, "IPPIS field is required"],
-            unique:true,
-            trim: true,
-        },
-        password: {
-            type: String,
-            required: [true, "Password field is required"]
-        },
-        passcode: {
-            type: String,
-            default: null
-        },
-        position: [{
-            type: Schema.Types.ObjectId,
-            ref: "department"
-        }],
-        username: {
-            type: String,
-            unique: true,
-            trim: true
-        },
+  {
+    accesRole: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "accessRole",
+      },
+    ],
+    available: {
+      type: Boolean,
+      default: true,
     },
-    { 
-        timestamps: true,
-        index: {
-            email: 1,
-            username: 1,
-        }
-    }
+    email: {
+      type: String,
+      required: [true, "Email field is required"],
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+    employeeId: {
+      type: String,
+      required: [true, "IPPIS field is required"],
+      unique: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: [true, "Password field is required"],
+    },
+    passcode: {
+      type: String,
+      default: null,
+    },
+    position: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "department",
+      },
+    ],
+    username: {
+      type: String,
+      unique: true,
+      trim: true,
+    },
+  },
+  {
+    timestamps: true,
+    index: {
+      email: 1,
+      username: 1,
+    },
+  }
 );
 
 // Create the model based on the schema
