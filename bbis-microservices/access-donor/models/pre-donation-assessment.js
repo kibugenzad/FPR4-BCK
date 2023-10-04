@@ -1,6 +1,24 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// Define Question Schema
+const QuestionSchema = new Schema({
+  questionText: {
+    type: String,
+    required: [true, "Question text is required"],
+  },
+  options: [
+    {
+      type: String,
+    },
+  ],
+  answerType: {
+    // for example, 'text', 'multipleChoice', etc
+    type: String,
+    required: [true, "Answer type is required"],
+  },
+});
+
 // Main PreDonationAssessment schema
 const PreDonationAssessmentSchema = new Schema(
   {
@@ -16,12 +34,7 @@ const PreDonationAssessmentSchema = new Schema(
     },
     pulseRate: { type: Number, required: true },
     hemoglobinLevel: { type: Number, required: true },
-    healthQuestionnaire: {
-      recentIllness: { type: Boolean, required: true },
-      recentMedication: { type: Boolean, required: true },
-      recentSurgery: { type: Boolean, required: true },
-      // to be continued
-    },
+    healthQuestionnaire: [QuestionSchema],
     isEligible: { type: Boolean, default: false },
     remarks: { type: String },
     assessedBy: { type: Schema.Types.ObjectId, ref: "Account", required: true },
