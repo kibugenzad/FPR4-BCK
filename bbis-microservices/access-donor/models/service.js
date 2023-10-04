@@ -63,7 +63,7 @@ const ServiceSchema = new Schema(
     approver: {
       type: [
         {
-          ippisNumber: {
+          employeeId: {
             type: String,
             required: [true, "ippsNumber field is required"],
             unique: true,
@@ -81,7 +81,7 @@ const ServiceSchema = new Schema(
           if (!v) return true; // If null or undefined, it's valid
           return (
             Array.isArray(v) &&
-            v.every((approver) => approver.ippisNumber && approver.position)
+            v.every((approver) => approver.employeeId && approver.position)
           );
         },
         message: "Invalid approver information",
