@@ -39,7 +39,7 @@ class BloodDistributor {
 
   static update(req) {
     const { id } = req.body;
-    return Model.findByIdAndUpdate({ _id: id }, req.body, { new: true });
+    return Model.findByIdAndUpdate(id, req.body, { new: true });
   }
 
   static delete(req) {
