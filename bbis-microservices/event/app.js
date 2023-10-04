@@ -10,8 +10,12 @@ const bodyParser = require("body-parser");
 const formidable = require("express-formidable");
 const socketio = require("socket.io");
 const { authenticateGateway } = require("./commons/middlewares/authentication");
+const {
+  parseSpecialTypes,
+  parseNotificationType,
+} = require("./commons/middleware/parseTypes");
 const appConfig = require("./config");
-const routes = require("./routers");  // Import all routes as a single object
+const routes = require("./routers"); // Import all routes as a single object
 
 // Initialize
 const app = express();
@@ -35,21 +39,25 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-    const contentType = req.headers["content-type"] || "";
-    const hasJsonContent = contentType.includes("application/json");
+  const contentType = req.headers["content-type"] || "";
+  const hasJsonContent = contentType.includes("application/json");
 
-    if (!hasJsonContent && !(req.body && Object.keys(req.body).length > 0)) {
-        formidable()(req, res, next);
-    } else {
-        next();
-    }
+  if (!hasJsonContent && !(req.body && Object.keys(req.body).length > 0)) {
+    formidable()(req, res, next);
+  } else {
+    next();
+  }
 });
 
 // Authentication
 app.use(authenticateGateway);
 
+// parseTypes
+app.use(parseSpecialTypes);
+app.use(parseNotificationType);
+
 // Routes
-Object.keys(routes).forEach(route => {
+Object.keys(routes).forEach((route) => {
   app.use(apiPrefix, routes[route]);
 });
 
@@ -70,7 +78,7 @@ app.set("socketio", io);
 
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
-  socket.on("user_info", data => {
+  socket.on("user_info", (data) => {
     console.log(`User connected id: ${data.id}`);
   });
   socket.on("disconnect", () => {
