@@ -32,7 +32,7 @@ class Position {
     const query = this.buildQuery(req.body);
 
     return Model.find(query)
-      .populate({ path: "position" })
+      .populate({ path: "department" })
       .sort({ date: -1 })
       .limit(limit)
       .skip(page ? limit * (page - 1) : 0);
@@ -44,7 +44,7 @@ class Position {
 
   static update(req) {
     const { id } = req.body;
-    return Model.findByIdAndUpdate({ _id: id }, req.body, { new: true });
+    return Model.findByIdAndUpdate(id, req.body, { new: true });
   }
 
   static delete(req) {
