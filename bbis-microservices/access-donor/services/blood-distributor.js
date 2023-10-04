@@ -26,11 +26,13 @@ class BloodDistributor {
     const { limit = config.limit, page } = req.body;
     const query = this.buildQuery(req.body);
 
-    return Model.find(query)
-      .populate({ path: "address" })
-      .sort({ date: -1 })
-      .limit(limit)
-      .skip(page ? limit * (page - 1) : 0);
+    return (
+      Model.find(query)
+        // .populate({ path: "address" })
+        .sort({ date: -1 })
+        .limit(limit)
+        .skip(page ? limit * (page - 1) : 0)
+    );
   }
 
   static create(req) {
