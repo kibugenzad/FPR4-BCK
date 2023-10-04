@@ -32,6 +32,7 @@ class BloodTest {
     const query = this.buildQuery(req.body);
 
     return Model.find(query)
+      .populate({ path: "approvals.account" })
       .populate({ path: "centerSite" })
       .populate({ path: "donation" })
       .sort({ date: -1 })
