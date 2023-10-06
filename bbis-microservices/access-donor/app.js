@@ -10,7 +10,10 @@ const bodyParser = require("body-parser");
 const formidable = require("express-formidable");
 const socketio = require("socket.io");
 const { authenticateGateway } = require("./commons/middleware/authentication");
-const { parseSpecialTypes } = require("./commons/middleware/parseTypes");
+const {
+  parseSpecialTypes,
+  parseRequestType,
+} = require("./commons/middleware/parseTypes");
 const appConfig = require("./commons/config/app-config");
 const routes = require("./routers"); // Import all routes as a single object
 
@@ -56,6 +59,7 @@ app.use(authenticateGateway);
 
 // parseTypes
 app.use(parseSpecialTypes);
+app.use(parseRequestType);
 
 // Routes
 Object.keys(routes).forEach((route) => {
