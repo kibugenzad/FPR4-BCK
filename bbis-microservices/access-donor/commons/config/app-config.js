@@ -21,4 +21,7 @@ module.exports = {
     "/api/access/authentication/account",
     "/api/access/authentication/user",
   ],
+  adminRoles: ["superAdmin", "superUser", "account"],
+  restrictRequestRoles: ["account", "donor"],
+  donationUrl: ["/api/access/bllodDonation"],
 };
