@@ -30,11 +30,11 @@ const authenticateGateway = async (req, res, next) => {
   });
 
   // Validate token if URL is not whitelisted or if a token is provided.
-  if (!isWhitelisted || hasBearerHeader) {
-    if (!hasBearerHeader) {
-      return res.status(403).json({ error: "Forbidden: No Token Provided" });
-    }
+  if (!isWhitelisted && !hasBearerHeader) {
+    return res.status(403).json({ error: "Forbidden: No Token Provided" });
+  }
 
+  if (!isWhitelisted || hasBearerHeader) {
     console.log({ bearerHeader });
 
     const bearer = bearerHeader.split(" ");
@@ -42,6 +42,15 @@ const authenticateGateway = async (req, res, next) => {
 
     try {
       decoded = await jwt.verify(bearerToken, appConfig.secret);
+      const { accountType } = decoded;
+
+      if (
+        !appConfig.adminRoles.includes(accountType) &&
+        !appConfig.userWhitelistedPaths.includes(req.path)
+      ) {
+        return res.status(403).json({ error: "Forbidden: Access Denided" });
+      }
+
       req.body.decodedToken = decoded;
     } catch (err) {
       console.log(err);
