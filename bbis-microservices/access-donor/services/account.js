@@ -91,7 +91,7 @@ class Account {
 
     if (match) {
       let token = jwt.sign(
-        { id: user._id, account_type: "account" },
+        { id: user._id, position: user.position, account_type: "account" },
         config.secret,
         { expiresIn: 60 * 60 * 24 }
       ); // 24 hours
