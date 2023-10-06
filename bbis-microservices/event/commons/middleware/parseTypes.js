@@ -88,38 +88,56 @@ const parseSpecialTypes = (req, res, next) => {
 
 const parseNotificationType = (req, res, next) => {
   try {
-    if (
-      appConfig.notificationUrl.includes(req.path.toLowerCase()) &&
-      req.method.includes(["Post", "Put"])
-    ) {
-      const { decodedToken, ...restOfBody } = req.body;
-      // Validate req.body structure and types to ensure it adheres to expected format
-      if (
-        !req.body ||
-        !req.body.service ||
-        !Array.isArray(req.body.service.approver) ||
-        !req.body.user
-      ) {
-        // Handle the error case where data is not as expected
-        res.status(422).send("Unexpected Format!");
-        return;
+    if (appConfig.notificationUrl.includes(req.path.toLowerCase())) {
+      const { decodedToken, service, user, ...restOfBody } = req.body;
+
+      // Validate common data structure upfront
+      const isValidDataStructure =
+        service && Array.isArray(service.approver) && user;
+
+      if (req.method === "POST") {
+        // Validate req.body structure and types to ensure it adheres to expected format
+        if (!isValidDataStructure) {
+          res.status(422).send("Unexpected Format!");
+          return;
+        }
+
+        let { approver: accounts } = service;
+
+        // structure body as expected
+        req.body = {
+          body: { ...restOfBody, user, timeStampUTC: getCurrentUTC() },
+          accounts,
+          user,
+        };
+
+        console.log("Parsed notification body: ", req.body);
+      } else if (req.method === "GET" && decodedToken) {
+        const isRestricted = appConfig.restrictNotificationRoles.includes(
+          decodedToken.accountType
+        );
+
+        if (isRestricted) {
+          // structure body as expected
+          let restrictByAccountField =
+            decodedToken.accountType === "account" ? "account" : "donor";
+          let restrictByAccountValue =
+            restrictByAccountField === "account"
+              ? decodedToken.position
+                ? decodedToken.position
+                : []
+              : [decodedToken.id];
+          let restriction = {};
+          restriction[restrictByAccountField] = restrictByAccountValue;
+
+          req.body = {
+            ...restOfBody,
+            ...restriction,
+          };
+        }
       }
-
-      let accounts = req.body.service.approver;
-
-      // structure body as expected
-      req.body = {
-        body: JSON.stringify({ ...restOfBody }),
-        accounts,
-        user: restOfBody.user,
-      };
-
-      console.log("Parsed notification body: ", req.body);
-
-      next();
-    } else {
-      next();
     }
+    next();
   } catch (error) {
     // Handle any unexpected errors
     next(error);
