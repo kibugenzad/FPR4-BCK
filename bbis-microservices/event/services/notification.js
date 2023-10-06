@@ -36,6 +36,34 @@ class Notification {
       .skip(page ? limit * (page - 1) : 0);
   }
 
+  static last(req) {
+    const { limit = config.limit, page = 0 } = req.body;
+
+    return Model.aggregate([
+      {
+        $match: query,
+      },
+      {
+        $sort: { updatedAt: -1 },
+      },
+      {
+        $skip: page * limit,
+      },
+      {
+        $limit: limit,
+      },
+      {
+        $group: {
+          _id: "$_id",
+          doc: { $first: "$$ROOT" },
+        },
+      },
+      {
+        $replaceRoot: { newRoot: "$doc" },
+      },
+    ]);
+  }
+
   static create(req) {
     return Model.create(req.body);
   }
