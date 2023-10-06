@@ -9,18 +9,18 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const formidable = require("express-formidable");
 const socketio = require("socket.io");
-const { authenticateGateway } = require("./commons/middlewares/authentication");
+const { authenticateGateway } = require("./commons/middleware/authentication");
 const {
   parseSpecialTypes,
   parseNotificationType,
 } = require("./commons/middleware/parseTypes");
 const { handleAlert } = require("./commons/utils/handler");
-const appConfig = require("./config");
+const appConfig = require("./commons/config/app-config");
 const routes = require("./routers"); // Import all routes as a single object
 
 // Initialize
 const app = express();
-const PORT = process.env.PORT || 5397;
+const PORT = process.env.PORT || 3387;
 const apiPrefix = appConfig.apiPrefix;
 
 // Middlewares
