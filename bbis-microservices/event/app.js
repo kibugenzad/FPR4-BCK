@@ -14,6 +14,7 @@ const {
   parseSpecialTypes,
   parseNotificationType,
 } = require("./commons/middleware/parseTypes");
+const { handleAlert } = require("./commons/utils/handler");
 const appConfig = require("./config");
 const routes = require("./routers"); // Import all routes as a single object
 
@@ -85,3 +86,5 @@ io.on("connection", (socket) => {
     console.log(`User disconnected: ${socket.id}`);
   });
 });
+
+handleAlert.start();
