@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const appConfig = require("../config/app-config");
 
 const parseSpecialTypes = (req, res, next) => {
   req.params = { ...req.query, ...req.params };
@@ -85,4 +86,38 @@ const parseSpecialTypes = (req, res, next) => {
   next();
 };
 
-module.exports = { parseSpecialTypes };
+const parseRequestType = (req, res, next) => {
+  try {
+    if (appConfig.donationUrl.includes(req.path.toLowerCase())) {
+      const { decodedToken, user, ...restOfBody } = req.body;
+
+      if (req.method === "GET" && decodedToken) {
+        const isRestricted = appConfig.restrictRequestRoles.includes(
+          decodedToken.accountType
+        );
+
+        if (isRestricted) {
+          // structure body as expected
+          let restrictByAccountField =
+            decodedToken.accountType === "account"
+              ? "approvals.account"
+              : "donor";
+          let restrictByAccountValue = [decodedToken.id];
+          let restriction = {};
+          restriction[restrictByAccountField] = restrictByAccountValue;
+
+          req.body = {
+            ...restOfBody,
+            ...restriction,
+          };
+        }
+      }
+    }
+    next();
+  } catch (error) {
+    // Handle any unexpected errors
+    next(error);
+  }
+};
+
+module.exports = { parseSpecialTypes, parseRequestType };
