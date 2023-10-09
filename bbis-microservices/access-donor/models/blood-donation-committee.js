@@ -10,7 +10,7 @@ const BloodDonationCommitteeSchema = new Schema(
     email: { type: String, required: true },
     center: {
       type: Schema.Types.ObjectId,
-      ref: "CenterSite",
+      ref: "BloodCenter",
       required: true,
     },
     centerSite: {
