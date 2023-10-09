@@ -29,6 +29,7 @@ class BloodRequest {
     return Model.find(query)
       .populate({ path: "approvals.account" })
       .populate({ path: "linkedEntity.distributor" })
+      .populate({ path: "linkedEntity.hospital" })
       .populate({ path: "donor" })
       .sort({ date: -1 })
       .limit(limit)
