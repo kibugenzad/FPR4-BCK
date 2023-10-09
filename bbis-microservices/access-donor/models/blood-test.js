@@ -32,7 +32,7 @@ const BloodTestSchema = new Schema(
     // Link to Site Schema
     centerSite: {
       type: Schema.Types.ObjectId,
-      ref: "CenterSite",
+      ref: "BloodCenterSite",
       required: true,
     },
     // Link to Donation Schema
