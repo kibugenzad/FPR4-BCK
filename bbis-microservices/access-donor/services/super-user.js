@@ -35,7 +35,7 @@ class SuperUser {
     return Model.find(query)
       .populate({ path: "accessRole" })
       .select(["-password"])
-      .sort({ date: -1 })
+      .sort({ createdAt: -1 })
       .limit(limit)
       .skip(page ? limit * (page - 1) : 0);
   }
@@ -69,7 +69,7 @@ class SuperUser {
     const { email, password, passcode } = req.body;
     const user = await Model.findOne({ email: email })
       .populate({ path: "accessRole" })
-      .select("+password");
+      .select("+password +passcode");
 
     if (!user) {
       return {
@@ -85,17 +85,24 @@ class SuperUser {
 
     if (match) {
       let token = jwt.sign(
-        { id: user._id, position: user.position, account_type: "superUser" },
+        {
+          id: user._id,
+          institution: user.institution,
+          position: user.position,
+          accessRole: user.accessRole,
+          accountType: "superUser",
+        },
         config.secret,
         { expiresIn: 60 * 60 * 24 }
       ); // 24 hours
       let resp = {
         success: true,
         token: token,
+        id: user._id,
         username: user.username,
         name: user.name,
         contact: user.contact,
-        accessRole: user.accessRole,
+        accessRoleId: user.accessRole._id,
       };
       return resp;
     } else {
