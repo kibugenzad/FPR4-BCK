@@ -16,7 +16,7 @@ class Account {
     query = filterIds(query, filters);
 
     const arrayFields = ["department"];
-    const exactFields = ["active", "email", "username"];
+    const exactFields = ["active", "email", "username", "outsideOrganization"];
 
     arrayFields.forEach((field) => {
       processArrayQuery(query, field, filters[field]);
@@ -31,7 +31,12 @@ class Account {
 
   static async hashPassword(password) {
     const saltRounds = 10;
-    return await bcrypt.hash(password, saltRounds);
+    try {
+      return await bcrypt.hash(password, saltRounds);
+    } catch (error) {
+      error.message = `Password hashing failed! ${error.message}`;
+      throw error;
+    }
   }
 
   static get(req) {
@@ -42,7 +47,7 @@ class Account {
       .populate({ path: "accessRole" })
       .populate({ path: "department" })
       .populate({ path: "position" })
-      .sort({ date: -1 })
+      .sort({ createdAt: -1 })
       .limit(limit)
       .skip(page ? limit * (page - 1) : 0);
   }
@@ -75,7 +80,7 @@ class Account {
     const { email, password, passcode } = req.body;
     const user = await Model.findOne({ email: email })
       .populate({ path: "accessRole" })
-      .select("+password");
+      .select("+password +passcode");
 
     if (!user) {
       return {
@@ -91,13 +96,22 @@ class Account {
 
     if (match) {
       let token = jwt.sign(
-        { id: user._id, position: user.position, account_type: "account" },
+        {
+          id: user._id,
+          position: user.position,
+          institution: user.institution,
+          accessRoleId: user.accessRole._id,
+          accountType: user.outsideOrganization
+            ? "acount-subApprover"
+            : "account",
+        },
         config.secret,
         { expiresIn: 60 * 60 * 24 }
       ); // 24 hours
       let resp = {
         success: true,
         token: token,
+        id: user._id,
         username: user.username,
         name: user.name,
         contact: user.contact,
