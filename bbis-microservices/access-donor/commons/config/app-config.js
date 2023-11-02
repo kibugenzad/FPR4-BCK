@@ -21,7 +21,14 @@ module.exports = {
     "/api/access/authentication/account",
     "/api/access/authentication/user",
   ],
+  userWhitelistedPaths: [
+    "/api/access/authentication/user",
+    "/api/access/request",
+    "/api/access/service",
+  ],
   adminRoles: ["superAdmin", "superUser", "account"],
+  superAdminRoles: ["superAdmin", "superUser"],
+  userRoles: ["user"],
   restrictRequestRoles: ["account", "donor"],
-  donationUrl: ["/api/access/bllodDonation"],
+  donationUrl: ["/api/access/bloodDonation"],
 };
