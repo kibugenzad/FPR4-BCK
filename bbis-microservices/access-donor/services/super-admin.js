@@ -35,7 +35,7 @@ class SuperAdmin {
     return Model.find(query)
       .populate({ path: "accessRole" })
       .select(["-password"])
-      .sort({ date: -1 })
+      .sort({ createdAt: -1 })
       .limit(limit)
       .skip(page ? limit * (page - 1) : 0);
   }
@@ -58,7 +58,7 @@ class SuperAdmin {
     const { email, password, passcode } = req.body;
     const user = await Model.findOne({ email: email })
       .populate({ path: "accessRole" })
-      .select("+password");
+      .select("+password +passcode");
 
     if (!user) {
       return {
@@ -74,7 +74,11 @@ class SuperAdmin {
 
     if (match) {
       let token = jwt.sign(
-        { id: user._id, account_type: "superAdmin" },
+        {
+          id: user._id,
+          accessRole: user.accessRole,
+          accountType: "superAdmin",
+        },
         config.secret,
         { expiresIn: 60 * 60 * 24 }
       ); // 24 hours
