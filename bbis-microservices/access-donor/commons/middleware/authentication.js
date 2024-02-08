@@ -47,51 +47,52 @@ const authenticateGateway = async (req, res, next) => {
       const decoded = await jwt.verify(bearerToken, appConfig.secret);
       let { accountType, accessRoleId } = decoded;
 
-      if (accessRoleId) {
-        var reqAccessRole = { body: { id: accessRoleId } };
-        var [accessRole] = await Controller[GET_METHOD](
-          reqAccessRole,
-          ACCESS_ROLE_SERVICE_NAME
-        );
+      if (false) {
+        if (accessRoleId) {
+          var reqAccessRole = { body: { id: accessRoleId } };
+          var [accessRole] = await Controller[GET_METHOD](
+            reqAccessRole,
+            ACCESS_ROLE_SERVICE_NAME
+          );
 
-        console.log(accessRole);
-      }
+          console.log(accessRole);
+        }
 
-      if (
-        accessRole &&
-        accessRole.permissions &&
-        accessRole.permissions.operationPaths &&
-        accessRole.permissions.operationPaths[`_${method}`]
-      ) {
-        const operationPaths =
-          accessRole.permissions.operationPaths[`_${method}`];
+        if (
+          accessRole &&
+          accessRole.permissions &&
+          accessRole.permissions.operationPaths &&
+          accessRole.permissions.operationPaths[`_${method}`]
+        ) {
+          const operationPaths =
+            accessRole.permissions.operationPaths[`_${method}`];
 
-        if (!operationPaths.includes(req.path)) {
+          if (!operationPaths.includes(req.path)) {
+            return res.status(403).json({ error: "Forbidden: Access Denided" });
+          }
+        } else if (appConfig.userRoles.includes(accountType)) {
+          if (!appConfig.userWhitelistedPaths.includes(req.path)) {
+            return res.status(403).json({ error: "Forbidden: Access Denided" });
+          }
+        } else if (!appConfig.superAdminRoles.includes(accountType)) {
           return res.status(403).json({ error: "Forbidden: Access Denided" });
         }
-      } else if (appConfig.userRoles.includes(accountType)) {
-        if (!appConfig.userWhitelistedPaths.includes(req.path)) {
+
+        if (
+          !appConfig.adminRoles.includes(accountType) &&
+          !appConfig.userWhitelistedPaths.includes(req.path)
+        ) {
           return res.status(403).json({ error: "Forbidden: Access Denided" });
         }
-      } else if (!appConfig.superAdminRoles.includes(accountType)) {
-        return res.status(403).json({ error: "Forbidden: Access Denided" });
-      }
 
-      if (
-        !appConfig.adminRoles.includes(accountType) &&
-        !appConfig.userWhitelistedPaths.includes(req.path)
-      ) {
-        return res.status(403).json({ error: "Forbidden: Access Denided" });
+        if (
+          !appConfig.adminRoles.includes(accountType) &&
+          !appConfig.userWhitelistedPaths.includes(req.path)
+        ) {
+          console.log("here 5");
+          return res.status(403).json({ error: "Forbidden: Access Denided" });
+        }
       }
-
-      if (
-        !appConfig.adminRoles.includes(accountType) &&
-        !appConfig.userWhitelistedPaths.includes(req.path)
-      ) {
-        console.log("here 5");
-        return res.status(403).json({ error: "Forbidden: Access Denided" });
-      }
-
       req.body.decodedToken = decoded;
     } catch (err) {
       console.log(err);
