@@ -103,6 +103,7 @@ class SuperUser {
         name: user.name,
         contact: user.contact,
         accessRoleId: user.accessRole._id,
+        pin: user.pin,
       };
       return resp;
     } else {
