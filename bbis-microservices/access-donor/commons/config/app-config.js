@@ -14,7 +14,7 @@ module.exports = {
     "/api/access/service",
     "/api/access/ippis",
     "/api/access/ippis/user/signup",
-    "/api/access/preassessment",
+    "/api/access/predonationassessment",
   ],
   authUrls: [
     "/api/access/authentication/superadmin",
