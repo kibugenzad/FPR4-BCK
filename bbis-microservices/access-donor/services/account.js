@@ -116,6 +116,7 @@ class Account {
         name: user.name,
         contact: user.contact,
         accessRole: user.accessRole,
+        pin: user.pin,
       };
       return resp;
     } else {
