@@ -30,14 +30,18 @@ const DonorSchema = new Schema(
     },
     email: {
       type: String,
-      required: [true, "Email field is required"],
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+    phoneNumber: {
+      type: String,
       unique: true,
       trim: true,
       lowercase: true,
     },
     password: {
       type: String,
-      required: [true, "Password field is required"],
     },
     passcode: {
       type: String,
@@ -53,6 +57,18 @@ const DonorSchema = new Schema(
       type: String,
       unique: true,
       trim: true,
+    },
+    firstName: {
+      type: String,
+      required: [true, "firstName is required"],
+    },
+    lastName: {
+      type: String,
+      required: [true, "lastName is required"],
+    },
+    verified: {
+      type: Boolean,
+      default: true,
     },
   },
   {
