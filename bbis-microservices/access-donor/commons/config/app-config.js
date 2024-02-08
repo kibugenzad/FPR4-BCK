@@ -15,6 +15,9 @@ module.exports = {
     "/api/access/ippis",
     "/api/access/ippis/user/signup",
     "/api/access/predonationassessment",
+    "/api/access/centerSite",
+    "/api/access/bloodcentersite",
+    "/api/access/bloodcenter",
   ],
   authUrls: [
     "/api/access/authentication/superadmin",
