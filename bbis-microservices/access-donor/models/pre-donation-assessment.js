@@ -26,6 +26,7 @@ const PreDonationAssessmentSchema = new Schema(
       type: Boolean,
       default: true,
     },
+    donor: { type: Schema.Types.ObjectId, ref: "Donor", required: true },
     weight: { type: Number, required: true },
     temperature: { type: Number, required: true },
     bloodPressure: {
