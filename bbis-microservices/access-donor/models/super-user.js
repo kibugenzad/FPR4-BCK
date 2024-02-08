@@ -45,6 +45,11 @@ const SuperUserSchema = new Schema(
         ref: "department",
       },
     ],
+    pin: {
+      type: String,
+      unique: true,
+      trim: true,
+    },
     username: {
       type: String,
       unique: true,
