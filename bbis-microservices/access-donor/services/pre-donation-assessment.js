@@ -1,4 +1,4 @@
-const Model = require("../models/position");
+const Model = require("../models/pre-donation-assessment");
 const config = require("../commons/config/app-config");
 const {
   filterDates,
