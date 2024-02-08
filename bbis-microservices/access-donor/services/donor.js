@@ -85,7 +85,7 @@ class Donor {
 
     if (match) {
       let token = jwt.sign(
-        { id: user._id, position: user.position, account_type: "superUser" },
+        { id: user._id, position: user.position, account_type: "donor" },
         config.secret,
         { expiresIn: 60 * 60 * 24 }
       ); // 24 hours
