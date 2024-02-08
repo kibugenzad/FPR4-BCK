@@ -27,7 +27,7 @@ const SuperUserSchema = new Schema(
     },
     employeeId: {
       type: String,
-      required: [true, "IPPIS field is required"],
+      required: [true, "employeeId field is required"],
       unique: true,
       trim: true,
     },
@@ -48,6 +48,10 @@ const SuperUserSchema = new Schema(
     pin: {
       type: String,
       unique: true,
+      trim: true,
+    },
+    name: {
+      type: String,
       trim: true,
     },
     username: {
