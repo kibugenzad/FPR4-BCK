@@ -61,6 +61,10 @@ const AccountSchema = new Schema(
         required: [true, "position field is required"],
       },
     ],
+    name: {
+      type: String,
+      trim: true,
+    },
     username: {
       type: String,
       unique: true,
