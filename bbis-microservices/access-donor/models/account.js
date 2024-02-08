@@ -41,6 +41,11 @@ const AccountSchema = new Schema(
       unique: true,
       trim: true,
     },
+    pin: {
+      type: String,
+      unique: true,
+      trim: true,
+    },
     password: {
       type: String,
       required: [true, "password field is required"],
