@@ -47,6 +47,10 @@ const DonorSchema = new Schema(
       type: String,
       default: null,
     },
+    dateOfBirth: {
+      type: String,
+      default: null,
+    },
     donorNumber: {
       type: String,
       required: [true, "donorNumber field is required"],
