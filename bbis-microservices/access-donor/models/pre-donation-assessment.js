@@ -2,7 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Define Question Schema
-const QuestionSchema = new Schema({
+const QuestionAnswerSchema = new Schema({
+  duplicateId: {
+    type: String,
+  },
   questionText: {
     type: String,
     required: [true, "Question text is required"],
@@ -16,6 +19,14 @@ const QuestionSchema = new Schema({
     // for example, 'text', 'multipleChoice', etc
     type: String,
     required: [true, "Answer type is required"],
+  },
+  answer: {
+    type: Schema.Types.Mixed,
+    // required: [true, "Answer is required"],
+  },
+  required: {
+    type: Boolean,
+    default: true,
   },
 });
 
@@ -35,7 +46,7 @@ const PreDonationAssessmentSchema = new Schema(
     },
     pulseRate: { type: Number },
     hemoglobinLevel: { type: Number },
-    healthQuestionnaire: [QuestionSchema],
+    healthQuestionnaire: [QuestionAnswerSchema],
     isEligible: { type: Boolean },
     remarks: { type: String },
     assessedBy: { type: Schema.Types.ObjectId, ref: "Account" },
