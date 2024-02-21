@@ -4,6 +4,35 @@ Donor model
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// Define Question Schema
+const QuestionAnswerSchema = new Schema({
+  duplicateId: {
+    type: String,
+  },
+  questionText: {
+    type: String,
+    required: [true, "Question text is required"],
+  },
+  options: [
+    {
+      type: String,
+    },
+  ],
+  answerType: {
+    // for example, 'text', 'multipleChoice', etc
+    type: String,
+    required: [true, "Answer type is required"],
+  },
+  answer: {
+    type: Schema.Types.Mixed,
+    // required: [true, "Answer is required"],
+  },
+  required: {
+    type: Boolean,
+    default: true,
+  },
+});
+
 // Create account schema
 // Define the donor schema
 const DonorSchema = new Schema(
@@ -21,12 +50,10 @@ const DonorSchema = new Schema(
     center: {
       type: Schema.Types.ObjectId,
       ref: "BloodCenter",
-      required: true,
     },
     centerSite: {
       type: Schema.Types.ObjectId,
       ref: "BloodCenterSite",
-      required: true,
     },
     email: {
       type: String,
@@ -74,6 +101,7 @@ const DonorSchema = new Schema(
       type: Boolean,
       default: true,
     },
+    registrationQuestionnaire: [QuestionAnswerSchema],
   },
   {
     timestamps: true,
