@@ -14,7 +14,7 @@ class Donor {
     query = filterDates(query, filters);
     query = filterIds(query, filters);
 
-    const exactFields = ["active", "email", "username"];
+    const exactFields = ["active", "email", "username", "pin", "donorNumber"];
 
     exactFields.forEach((field) => {
       processExactQuery(query, field, filters[field]);
