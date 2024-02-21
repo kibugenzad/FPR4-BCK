@@ -10,7 +10,7 @@ const Controller = require("../controller/bbis-access");
 // Set main api URL and service name
 const apiUrl = "/access/authentication";
 const routeUrlAccount = `${apiUrl}/account`;
-const routeUrlUser = `${apiUrl}/user`;
+const routeUrlDonor = `${apiUrl}/donor`;
 const routeUrlSuperUser = `${apiUrl}/superUser`;
 const routeUrlSuperAdmin = `${apiUrl}/superAdmin`;
 
@@ -20,8 +20,8 @@ router.post(routeUrlAccount, (req, res, next) =>
 );
 
 // authenticate user
-router.post(routeUrlUser, (req, res, next) =>
-  handleAuthentication("authenticate", req, res, next, "User", Controller)
+router.post(routeUrlDonor, (req, res, next) =>
+  handleAuthentication("authenticate", req, res, next, "Donor", Controller)
 );
 
 // authenticate superUser
