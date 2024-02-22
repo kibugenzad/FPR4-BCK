@@ -90,6 +90,9 @@ class Donor {
         { expiresIn: 60 * 60 * 24 }
       ); // 24 hours
       let resp = {
+        id: user._id,
+        account_type: "donor",
+        donorNumber: user.donorNumber,
         success: true,
         token: token,
         username: user.username,
