@@ -25,8 +25,8 @@ router.post(`${gatewayAPIUrl}/account`, (req, res) =>
   makeRequest(microserviceBaseUrl, `${gatewayAPIUrl}/account`, "post", req, res)
 );
 
-router.post(`${gatewayAPIUrl}/user`, (req, res) =>
-  makeRequest(microserviceBaseUrl, `${gatewayAPIUrl}/user`, "post", req, res)
+router.post(`${gatewayAPIUrl}/donor`, (req, res) =>
+  makeRequest(microserviceBaseUrl, `${gatewayAPIUrl}/donor`, "post", req, res)
 );
 router.post(`${gatewayAPIUrl}/superUser`, (req, res) =>
   makeRequest(
