@@ -37,6 +37,14 @@ const PreDonationAssessmentSchema = new Schema(
       type: Boolean,
       default: true,
     },
+    center: {
+      type: Schema.Types.ObjectId,
+      ref: "BloodCenter",
+    },
+    centerSite: {
+      type: Schema.Types.ObjectId,
+      ref: "BloodCenterSite",
+    },
     donor: { type: Schema.Types.ObjectId, ref: "Donor", required: true },
     weight: { type: Number },
     temperature: { type: Number },
