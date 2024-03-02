@@ -101,6 +101,17 @@ const DonorSchema = new Schema(
       type: Boolean,
       default: true,
     },
+    nationality:{
+      type: String,
+    },
+    identityDocNumberType:{
+      type: String,
+      enum:["Passport ID", "National ID"],
+      default:"National ID"
+    },
+    identityDocNumber:{
+      type: String,
+    },
     registrationQuestionnaire: [QuestionAnswerSchema],
   },
   {
