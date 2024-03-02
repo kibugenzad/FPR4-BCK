@@ -35,7 +35,9 @@ class Donor {
     return Model.find(query)
       .populate({ path: "accessRole" })
       .select(["-password"])
-      .sort({ date: -1 })
+      .populate({ path: "center" })
+      .populate({ path: "centerSite" })
+      .sort({ createdAt: -1 })
       .limit(limit)
       .skip(page ? limit * (page - 1) : 0);
   }
@@ -55,13 +57,14 @@ class Donor {
   }
 
   static update(req) {
-    const id = req.params.id;
+    const id = req.params.id || req.body.id;
     const data = req.body; // Assuming you meant to update with body data
     return Model.findByIdAndUpdate(id, data, { new: true });
   }
 
   static delete(req) {
-    const id = req.params.id;
+    const id = req.params.id || req.body.id;
+    console.log({id:id})
     return Model.remove({ _id: id });
   }
 
