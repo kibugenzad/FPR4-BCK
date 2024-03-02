@@ -61,6 +61,7 @@ const BloodRequestSchema = new Schema(
       },
     },
     description: { type: String, required: true },
+    status: { type: String },
     packages: { type: [packagesSchema], required: true },
     approvals: [
       {
