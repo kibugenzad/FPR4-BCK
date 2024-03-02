@@ -13,7 +13,7 @@ class PreDonationAssessment {
     query = filterDates(query, filters);
     query = filterIds(query, filters);
 
-    const arrayFields = ["department", "service"];
+    const arrayFields = ["department", "service", "donor"];
     const exactFields = ["name"];
 
     arrayFields.forEach((field) => {
@@ -34,7 +34,10 @@ class PreDonationAssessment {
     return Model.find(query)
       .populate({ path: "questionnaire" })
       .populate({ path: "assessedBy" })
-      .sort({ date: -1 })
+      .populate({ path: "donor" })
+      .populate({ path: "bloodCenter" })
+      .populate({ path: "bloodCenterSite" })
+      .sort({ createdAt: -1 })
       .limit(limit)
       .skip(page ? limit * (page - 1) : 0);
   }
