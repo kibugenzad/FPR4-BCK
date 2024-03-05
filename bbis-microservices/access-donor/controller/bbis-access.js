@@ -37,6 +37,10 @@ class BBISAccess {
     return this.performAction("delete", req, serviceName);
   }
 
+  static block(req, serviceName) {
+    return this.performAction("block", req, serviceName);
+  }
+
   static authenticate(req, serviceName) {
     if (!req.body.password) {
       throw new Error("No password provided in the request");

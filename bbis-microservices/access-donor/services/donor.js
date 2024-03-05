@@ -111,6 +111,25 @@ class Donor {
       };
     }
   }
+
+  // block/unblock donor
+  static async block(req) {
+    const { id,blockReason,blockType } = req.body;
+    const donor = await Model.findById(id);
+    let data;
+    if(donor.isBlocked === true){
+       data = { isBlocked: false, blockReason: null, blockType: null };
+    }else{
+      data = { isBlocked: true, blockReason, blockType };
+    }
+    return Model.findByIdAndUpdate(id, data, { new: true });
+  }
+
+
+    
+
+  
+
 }
 
 module.exports = Donor;
