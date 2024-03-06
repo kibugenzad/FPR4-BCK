@@ -33,7 +33,7 @@ router.delete(routeUrl, (req, res, next) => handleRequest(
 ));
 
 //count donations made by a donor
-router.get(`${routeUrl}/:donorId`, (req, res, next) => handleRequest(
+router.get(`${routeUrl}/count/:donorId`, (req, res, next) => handleRequest(
     "countByDonor", req, res, next, serviceName, Controller
 ));
 

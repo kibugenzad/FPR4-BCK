@@ -38,6 +38,8 @@ class PreDonationAssessment {
     return Model.find(query)
       .populate({ path: "questionnaire" })
       .populate({ path: "assessedBy" })
+      .populate({ path: "center" })
+      .populate({ path: "centerSite" })
       .populate({ path: "donor", 
         populate: [
           { path: "center" },
