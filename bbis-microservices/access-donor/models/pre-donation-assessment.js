@@ -58,6 +58,12 @@ const PreDonationAssessmentSchema = new Schema(
     isEligible: { type: Boolean },
     remarks: { type: String },
     assessedBy: { type: Schema.Types.ObjectId, ref: "Account" },
+    requestedDate: { type: Date },
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
+    },
   },
   {
     timestamps: true, // Enables automatic creation of createdAt and updatedAt fields

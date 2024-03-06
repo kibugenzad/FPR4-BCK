@@ -6,6 +6,7 @@ const express = require("express");
 const router = express.Router();
 const { handleRequest } = require("../commons/utils/handler");
 const Controller = require("../controller/bbis-access");
+const  checkIsDonorBlocked  = require("../commons/middleware/checkIsDonorBlocked");
 
 // Set main api URL and service name
 const apiUrl = "/access";
@@ -18,7 +19,7 @@ router.get(routeUrl, (req, res, next) =>
 );
 
 // create data
-router.post(routeUrl, (req, res, next) =>
+router.post(routeUrl, checkIsDonorBlocked, (req, res, next) =>
   handleRequest("post", req, res, next, serviceName, Controller)
 );
 

@@ -34,9 +34,12 @@ class PreDonationAssessment {
     return Model.find(query)
       .populate({ path: "questionnaire" })
       .populate({ path: "assessedBy" })
-      .populate({ path: "donor" })
-      .populate({ path: "bloodCenter" })
-      .populate({ path: "bloodCenterSite" })
+      .populate({ path: "donor", 
+        populate: [
+          { path: "center" },
+          { path: "centerSite" }
+        ]
+      })
       .sort({ createdAt: -1 })
       .limit(limit)
       .skip(page ? limit * (page - 1) : 0);
