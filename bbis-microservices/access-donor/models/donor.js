@@ -113,26 +113,20 @@ const DonorSchema = new Schema(
       type: String,
     },
     registrationQuestionnaire: [QuestionAnswerSchema],
-
-    isBlocked: {
-      type: Boolean,
-      default: false,
+    blockInfo: {
+      blocked: {
+        type: Boolean,
+        default: false,
+      },
+      blockReason: {
+        type: String,
+        default: null,
+      },
+      blockType: {
+        type: String,
+        default: null,
+      },
     },
-
-    blockReason: {
-      type: String,
-    },
-
-    blockDate: {
-      type: Date,
-      default: Date.now,
-    },
-  
-    blockType: {
-      type: String,
-      enum: ["temporary", "permanent"],
-    },
-
   },
   {
     timestamps: true,

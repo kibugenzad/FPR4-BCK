@@ -6,7 +6,6 @@ const express = require("express");
 const router = express.Router();
 const { handleRequest } = require("../commons/utils/handler");
 const Controller = require("../controller/bbis-access");
-const checkIsDonorBlocked = require("../commons/middleware/checkIsDonorBlocked");
 
 // Set main api URL and service name
 const apiUrl = "/access";

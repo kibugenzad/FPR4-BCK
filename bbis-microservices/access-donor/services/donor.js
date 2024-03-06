@@ -20,6 +20,14 @@ class Donor {
       processExactQuery(query, field, filters[field]);
     });
 
+    if (filters.center) {
+      query.center = filters.center;
+    }
+
+    if (filters.centerSite) {
+      query.centerSite = filters.centerSite;
+    }
+
     return query;
   }
 
@@ -29,15 +37,18 @@ class Donor {
   }
 
   static get(req) {
-    const { limit = config.limit, page } = req.body;
+    const { limit = config.limit, page ,sortField = 'createdAt', sortOrder = '-1'} = req.body;
     const query = this.buildQuery(req.body);
+
+    
+    const sort = {sortField: sortOrder}; 
 
     return Model.find(query)
       .populate({ path: "accessRole" })
       .select(["-password"])
       .populate({ path: "center" })
       .populate({ path: "centerSite" })
-      .sort({ createdAt: -1 })
+      .sort(sort)
       .limit(limit)
       .skip(page ? limit * (page - 1) : 0);
   }
@@ -117,10 +128,11 @@ class Donor {
     const { id,blockReason,blockType } = req.body;
     const donor = await Model.findById(id);
     let data;
-    if(donor.isBlocked === true){
-       data = { isBlocked: false, blockReason: null, blockType: null };
+    const blockInfo = donor.blockInfo;
+    if(blockInfo.blocked === true){
+       data = {blockInfo:{ blocked: false, blockReason, blockType }};
     }else{
-      data = { isBlocked: true, blockReason, blockType };
+      data = {blockInfo:{ blocked: true, blockReason, blockType }};
     }
     return Model.findByIdAndUpdate(id, data, { new: true });
   }

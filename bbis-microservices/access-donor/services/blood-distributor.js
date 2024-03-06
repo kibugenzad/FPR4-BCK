@@ -23,8 +23,11 @@ class BloodDistributor {
   }
 
   static get(req) {
-    const { limit = config.limit, page } = req.body;
+    const { limit = config.limit, page ,sortField = 'createdAt', sortOrder = '-1' } = req.body;
     const query = this.buildQuery(req.body);
+     
+    
+    const sort = {sortField: sortOrder}; 
 
     return (
       Model.find(query)
