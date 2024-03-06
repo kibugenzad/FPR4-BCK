@@ -23,6 +23,11 @@ class PreDonationAssessment {
     exactFields.forEach((field) => {
       processExactQuery(query, field, filters[field]);
     });
+  
+    for (const key in filters) {
+      if (key=== 'decodedToken'||key === 'limit' || key === 'page' || key === 'sortField' || key === 'sortOrder') continue;
+     query[key] = filters[key];
+    };
 
     return query;
   }

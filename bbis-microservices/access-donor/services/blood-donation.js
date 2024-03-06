@@ -45,7 +45,7 @@ class BloodDonation {
         .populate({ path: "center" })
         .populate({ path: "centerSite" })
         .populate({ path: "donor" })
-        .populate({ path: "collectedBy" })
+        // .populate({ path: "collectedBy" })
         .sort(sort)
         .limit(limit)
         .skip(page ? limit * (page - 1) : 0)

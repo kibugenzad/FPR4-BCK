@@ -33,6 +33,14 @@ const BloodDonationSchema = new Schema(
     },
     isActive: { type: Boolean, default: true },
     collectedBy: { type: String, required: true }, // Name or ID of the person who collected the blood
+    vitalSign:{
+      type: Schema.Types.ObjectId,
+      ref: "VitalSign",
+    },
+    startTime: { type: Date },
+    endTime: { type: Date },
+    reason: { type: String },
+    barcode:{}
   },
   {
     timestamps: true, // Enables automatic creation of createdAt and updatedAt fields
