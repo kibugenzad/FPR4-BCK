@@ -40,8 +40,10 @@ class Donor {
     const { limit = config.limit, page ,sortField = 'createdAt', sortOrder = '-1'} = req.body;
     const query = this.buildQuery(req.body);
 
+
     
-    const sort = {sortField: sortOrder}; 
+    const sort = {};
+    sort[sortField] = sortOrder; 
 
     return Model.find(query)
       .populate({ path: "accessRole" })
