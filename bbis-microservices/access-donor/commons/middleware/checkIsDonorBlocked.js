@@ -8,8 +8,9 @@ const checkIsDonorBlocked = async (req, res, next) => {
     if(!donor) {
         return res.status(404).json({ error: "Donor not found" });
     }else{
-    if (donor.isBlocked) {
-        return res.status(403).json({ error: "We are unfortunately unable to book an appointment for you, please consult the nearest BTD center for notification" });
+        const blockInfo = donor.blockInfo;
+    if (blockInfo.blocked === true) {
+        return res.status(403).json({ error: "We are unfortunately unable to book an appointment for you, please consult the nearest BTD center for more info" });
     }else{
         next();
 

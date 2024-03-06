@@ -40,14 +40,16 @@ class Account {
   }
 
   static get(req) {
-    const { limit = config.limit, page } = req.body;
+    const { limit = config.limit, page,  sortField = 'createdAt', sortOrder = '-1'  } = req.body;
     const query = this.buildQuery(req.body);
+    
+    const sort = {sortField: sortOrder}; 
 
     return Model.find(query)
       .populate({ path: "accessRole" })
       .populate({ path: "department" })
       .populate({ path: "position" })
-      .sort({ createdAt: -1 })
+      .sort(sort)
       .limit(limit)
       .skip(page ? limit * (page - 1) : 0);
   }
