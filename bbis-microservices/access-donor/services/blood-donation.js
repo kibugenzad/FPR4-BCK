@@ -28,12 +28,16 @@ class BloodDonation {
   }
 
   static get(req) {
-    const { limit = config.limit, page ,sortField = 'createdAt', sortOrder = '-1' } = req.body;
+    const {
+      limit = config.limit,
+      page,
+      sortField = "createdAt",
+      sortOrder = "-1",
+    } = req.body;
     const query = this.buildQuery(req.body);
-     
-    
-     const sort = {};
-    sort[sortField] = sortOrder; 
+
+    const sort = {};
+    sort[sortField] = sortOrder;
 
     return (
       Model.find(query)
@@ -60,6 +64,14 @@ class BloodDonation {
   static delete(req) {
     const { id } = req.body;
     return Model.remove({ _id: id });
+  }
+
+  //count number of donations made by a donor
+  static countByDonor(req) {
+    const { donorId } = req.params;
+    const count =  Model.countDocuments({ donor: donorId })
+  
+    return  count  ;
   }
 }
 

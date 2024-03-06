@@ -28,6 +28,10 @@ class Donor {
       query.centerSite = filters.centerSite;
     }
 
+    if (filters.identityDocNumber) {
+      query.identityDocNumber = filters.identityDocNumber;
+    }
+
     return query;
   }
 

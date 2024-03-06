@@ -97,6 +97,10 @@ const DonorSchema = new Schema(
       type: String,
       required: [true, "lastName is required"],
     },
+    gender: {
+      type: String,
+      enum:['male',"female"]
+    },
     verified: {
       type: Boolean,
       default: true,
