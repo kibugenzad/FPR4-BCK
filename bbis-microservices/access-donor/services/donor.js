@@ -14,23 +14,11 @@ class Donor {
     query = filterDates(query, filters);
     query = filterIds(query, filters);
 
-    const exactFields = ["active", "email", "username", "pin", "donorNumber"];
+    const exactFields = ["active", "email", "username", "pin", "donorNumber","lastName","center","centerSite","identityDocNumber","_id"];
 
     exactFields.forEach((field) => {
       processExactQuery(query, field, filters[field]);
     });
-
-    if (filters.center) {
-      query.center = filters.center;
-    }
-
-    if (filters.centerSite) {
-      query.centerSite = filters.centerSite;
-    }
-
-    if (filters.identityDocNumber) {
-      query.identityDocNumber = filters.identityDocNumber;
-    }
 
     return query;
   }
