@@ -32,4 +32,11 @@ router.delete(routeUrl, (req, res, next) => handleRequest(
     "delete", req, res, next, serviceName, Controller
 ));
 
+//count donations made by a donor
+router.get(`${routeUrl}/count/:donorId`, (req, res, next) => handleRequest(
+    "countByDonor", req, res, next, serviceName, Controller
+));
+
+
+
 module.exports = router;

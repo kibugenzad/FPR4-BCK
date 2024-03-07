@@ -29,8 +29,7 @@ class VitalSign {
         const { limit = config.limit, page, sortField = 'createdAt', sortOrder = '-1' } = req.body;
         const query = this.buildQuery(req.body);
     
-        const sort = { };
-        sort[sortField] = sortOrder;
+        const sort = {[sortField]: sortOrder}
     
         return Model.find(query)
         .populate({ path: "equipment" })

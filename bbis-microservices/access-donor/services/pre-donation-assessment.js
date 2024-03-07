@@ -23,6 +23,11 @@ class PreDonationAssessment {
     exactFields.forEach((field) => {
       processExactQuery(query, field, filters[field]);
     });
+  
+    for (const key in filters) {
+      if (key=== 'decodedToken'||key === 'limit' || key === 'page' || key === 'sortField' || key === 'sortOrder') continue;
+     query[key] = filters[key];
+    };
 
     return query;
   }
@@ -32,11 +37,14 @@ class PreDonationAssessment {
     const query = this.buildQuery(req.body);
     
     
-    const sort = {sortField: sortOrder}; 
+     
+    const sort = {[sortField]: sortOrder} 
 
     return Model.find(query)
       .populate({ path: "questionnaire" })
       .populate({ path: "assessedBy" })
+      .populate({ path: "center" })
+      .populate({ path: "centerSite" })
       .populate({ path: "donor", 
         populate: [
           { path: "center" },

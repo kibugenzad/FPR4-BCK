@@ -28,11 +28,18 @@ const handler = {
     try {
       const data = await Controller[actionType](req, serviceName);
 
+      if(actionType === "countByDonor"){
+        return res.send({count: data});
+      }
+
       const responseData =
         actionType === "get" ? alignDataResponse(req, data, paginate) : data;
 
+        console.log("responseData", data);  
+
       res.send(responseData);
     } catch (error) {
+      
       next(error);
     }
   },
