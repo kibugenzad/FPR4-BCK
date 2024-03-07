@@ -44,6 +44,15 @@ class BBISAccess {
   static countByDonor(req, serviceName) {
     return this.performAction("countByDonor", req, serviceName);
   }
+
+  // club
+  static addMember(req, serviceName) {
+    return this.performAction("addMember", req, serviceName);
+  }
+
+  static removeMember(req, serviceName) {
+    return this.performAction("removeMember", req, serviceName);
+  }
   
 
   static authenticate(req, serviceName) {
