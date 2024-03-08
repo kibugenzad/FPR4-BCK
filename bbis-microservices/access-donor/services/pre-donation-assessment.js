@@ -6,7 +6,7 @@ const {
   processArrayQuery,
   processExactQuery,
 } = require("../commons/utils/general-filters");
-
+const eventEmitter = require("../commons/event/eventEmitter");
 class PreDonationAssessment {
   static buildQuery(filters) {
     let query = { available: true }; // enforce availability
@@ -56,8 +56,13 @@ class PreDonationAssessment {
       .skip(page ? limit * (page - 1) : 0);
   }
 
-  static create(req) {
-    return Model.create(req.body);
+  static async create(req) {
+    const data = req.body;
+    const { donor } = data;
+    const assessment = await Model.create(data);
+    eventEmitter.emit("donationCreated", { donor });
+
+    return assessment;
   }
 
   static update(req) {

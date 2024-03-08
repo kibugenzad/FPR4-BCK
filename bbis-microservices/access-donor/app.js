@@ -9,6 +9,8 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const formidable = require("express-formidable");
 const socketio = require("socket.io");
+require("./commons/event/eventHandler");
+require("./commons/event/eventEmitter");
 const { authenticateGateway } = require("./commons/middleware/authentication");
 const {
   parseSpecialTypes,
