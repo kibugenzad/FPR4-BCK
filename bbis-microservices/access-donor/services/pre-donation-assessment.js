@@ -6,7 +6,7 @@ const {
   processArrayQuery,
   processExactQuery,
 } = require("../commons/utils/general-filters");
-
+const eventEmitter = require("../commons/event/eventEmitter");
 class PreDonationAssessment {
   static buildQuery(filters) {
     let query = { available: true }; // enforce availability
@@ -23,6 +23,11 @@ class PreDonationAssessment {
     exactFields.forEach((field) => {
       processExactQuery(query, field, filters[field]);
     });
+  
+    for (const key in filters) {
+      if (key=== 'decodedToken'||key === 'limit' || key === 'page' || key === 'sortField' || key === 'sortOrder') continue;
+     query[key] = filters[key];
+    };
 
     return query;
   }
@@ -32,11 +37,14 @@ class PreDonationAssessment {
     const query = this.buildQuery(req.body);
     
     
-    const sort = {sortField: sortOrder}; 
+     
+    const sort = {[sortField]: sortOrder} 
 
     return Model.find(query)
       .populate({ path: "questionnaire" })
       .populate({ path: "assessedBy" })
+      .populate({ path: "center" })
+      .populate({ path: "centerSite" })
       .populate({ path: "donor", 
         populate: [
           { path: "center" },
@@ -48,8 +56,13 @@ class PreDonationAssessment {
       .skip(page ? limit * (page - 1) : 0);
   }
 
-  static create(req) {
-    return Model.create(req.body);
+  static async create(req) {
+    const data = req.body;
+    const { donor } = data;
+    const assessment = await Model.create(data);
+    eventEmitter.emit("donationCreated", { donor });
+
+    return assessment;
   }
 
   static update(req) {

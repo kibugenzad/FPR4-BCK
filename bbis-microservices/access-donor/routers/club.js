@@ -1,7 +1,3 @@
-/*
-handle departments requests
-per route
-*/
 const express = require("express");
 const router = express.Router();
 const { handleRequest } = require("../commons/utils/handler");
@@ -9,8 +5,8 @@ const Controller = require("../controller/bbis-access");
 
 // Set main api URL and service name
 const apiUrl = "/access";
-const routeUrl = `${apiUrl}/bloodDonation`;
-const serviceName = "BloodDonation";
+const routeUrl = `${apiUrl}/club`;
+const serviceName = "Club";
 
 // get data
 router.get(routeUrl, (req, res, next) => handleRequest(
@@ -32,11 +28,15 @@ router.delete(routeUrl, (req, res, next) => handleRequest(
     "delete", req, res, next, serviceName, Controller
 ));
 
-//count donations made by a donor
-router.get(`${routeUrl}/count/:donorId`, (req, res, next) => handleRequest(
-    "countByDonor", req, res, next, serviceName, Controller
+//add member to club
+router.post(`${routeUrl}/addMember`, (req, res, next) => handleRequest(
+    "addMember", req, res, next, serviceName, Controller
 ));
 
-
+//remove member from club
+router.put(`${routeUrl}/removeMember`, (req, res, next) => handleRequest(
+    "removeMember", req, res, next, serviceName, Controller
+));
 
 module.exports = router;
+

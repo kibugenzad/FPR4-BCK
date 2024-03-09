@@ -6,6 +6,7 @@ const {
   processArrayQuery,
   processExactQuery,
 } = require("../commons/utils/general-filters");
+const eventEmitter = require("../commons/event/eventEmitter");
 
 class BloodDonation {
   static buildQuery(filters) {
@@ -28,11 +29,16 @@ class BloodDonation {
   }
 
   static get(req) {
-    const { limit = config.limit, page ,sortField = 'createdAt', sortOrder = '-1' } = req.body;
+    const {
+      limit = config.limit,
+      page,
+      sortField = "createdAt",
+      sortOrder = "-1",
+    } = req.body;
     const query = this.buildQuery(req.body);
-     
+
     
-    const sort = {sortField: sortOrder}; 
+    const sort = {[sortField]: sortOrder}
 
     return (
       Model.find(query)
@@ -40,15 +46,20 @@ class BloodDonation {
         .populate({ path: "center" })
         .populate({ path: "centerSite" })
         .populate({ path: "donor" })
-        .populate({ path: "collectedBy" })
+        // .populate({ path: "collectedBy" })
         .sort(sort)
         .limit(limit)
         .skip(page ? limit * (page - 1) : 0)
     );
   }
 
-  static create(req) {
-    return Model.create(req.body);
+  static async create(req) {
+    const data = req.body;
+    const { donor } = data;
+    const donation = await Model.create(data);
+    eventEmitter.emit("donationCreated", { donor });
+
+    return donation;
   }
 
   static update(req) {
@@ -59,6 +70,14 @@ class BloodDonation {
   static delete(req) {
     const { id } = req.body;
     return Model.remove({ _id: id });
+  }
+
+  //count number of donations made by a donor
+  static countByDonor(req) {
+    const { donorId } = req.params;
+    const count =  Model.countDocuments({ donor: donorId })
+  
+    return  count  ;
   }
 }
 

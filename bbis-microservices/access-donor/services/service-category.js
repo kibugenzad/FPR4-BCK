@@ -26,7 +26,8 @@ class ServiceCategory {
     const query = this.buildQuery(req.body);
      
     
-    const sort = {sortField: sortOrder}; 
+     
+    const sort = {[sortField]: sortOrder} 
 
     return Model.find(query)
       .sort(sort)
