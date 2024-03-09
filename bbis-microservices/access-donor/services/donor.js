@@ -7,6 +7,7 @@ const {
   filterIds,
   processExactQuery,
 } = require("../commons/utils/general-filters");
+const eventEmitter = require("../commons/event/eventEmitter");
 
 class Donor {
   static buildQuery(filters) {
@@ -58,7 +59,11 @@ class Donor {
       userData.passcode = await this.hashPassword(userData.passcode);
     }
 
-    return Model.create(userData);
+    const donor = await Model.create(userData);
+     
+    eventEmitter.emit("accountCreated", userData);
+
+    return donor;
   }
 
   static update(req) {

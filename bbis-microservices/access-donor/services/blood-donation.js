@@ -6,6 +6,7 @@ const {
   processArrayQuery,
   processExactQuery,
 } = require("../commons/utils/general-filters");
+const eventEmitter = require("../commons/event/eventEmitter");
 
 class BloodDonation {
   static buildQuery(filters) {
@@ -52,8 +53,13 @@ class BloodDonation {
     );
   }
 
-  static create(req) {
-    return Model.create(req.body);
+  static async create(req) {
+    const data = req.body;
+    const { donor } = data;
+    const donation = await Model.create(data);
+    eventEmitter.emit("donationCreated", { donor });
+
+    return donation;
   }
 
   static update(req) {
