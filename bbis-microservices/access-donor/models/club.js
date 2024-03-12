@@ -21,17 +21,21 @@ const ClubSchema = new Schema(
     description: {
       type: String,
       required: [true, "Club description is required"],
-    },
-    members: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Donor",
-      },
-    ],
+    }
   },
   {
     timestamps: true, 
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
+// Club has many members
+ClubSchema.virtual("members", {
+  ref: "ClubMember",
+  localField: "_id",
+  foreignField: "club",
+  justOne: false,
+
+});
 
 module.exports = mongoose.model("Club", ClubSchema);

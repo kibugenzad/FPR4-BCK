@@ -1,4 +1,4 @@
-const Model = require("../models/club");
+const Model = require("../models/club-member");
 const config = require("../commons/config/app-config");
 const {
   filterDates,
@@ -7,13 +7,14 @@ const {
   processExactQuery,
 } = require("../commons/utils/general-filters");
 
-class Club {
+class ClubMember {
+
     static buildQuery(filters) {
         let query = { available: true }; // enforce availability
         query = filterDates(query, filters);
         query = filterIds(query, filters);
     
-        const exactFields = ["name", "donationNumber", "members"];
+        const exactFields = ["donor", "club"];
     
         exactFields.forEach((field) => {
         processExactQuery(query, field, filters[field]);
@@ -23,16 +24,17 @@ class Club {
     }
     
     static get(req) {
-        const { limit = config.limit, page,sortField = 'createdAt', sortOrder = '-1' } = req.body;
+        const { limit = config.limit, page, sortField = 'createdAt', sortOrder = '-1' } = req.body;
         const query = this.buildQuery(req.body);
-         
+
         const sort = {[sortField]: sortOrder} 
-        
-        return Model.find(query)
-        .populate({ path: "members", populate: { path: "donor",select: '-password'  } })
-        .sort(sort)
-        .limit(limit)
-        .skip(page ? limit * (page - 1) : 0);
+    
+        return (
+        Model.find(query)
+            .sort(sort)
+            .limit(limit)
+            .skip(page ? limit * (page - 1) : 0)
+        );
     }
     
     static create(req) {
@@ -48,19 +50,19 @@ class Club {
         const { id } = req.body;
         return Model.remove({ _id: id });
     }
-
-
+    
     static addMember(req) {
-        const { id, member } = req.body;
-        return Model.findByIdAndUpdate(id, { $addToSet: { members: member } }, { new: true });
-
+        const { donor, club } = req.body;
+        return Model.create({ donor, club });
     }
-
+    
     static removeMember(req) {
-        const { id, member } = req.body;
-        return Model.findByIdAndUpdate(id, { $pull: { members: member } }, { new: true });
+        const { donor, club } = req.body;
+        return Model.remove({ donor, club });
     }
 
     }
 
-module.exports = Club;
+
+module.exports = ClubMember;
+
