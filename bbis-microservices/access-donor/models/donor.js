@@ -101,6 +101,9 @@ const DonorSchema = new Schema(
       type: String,
       enum:['male',"female"]
     },
+    imageUrl: {
+      type: String,
+    },
     verified: {
       type: Boolean,
       default: true,
