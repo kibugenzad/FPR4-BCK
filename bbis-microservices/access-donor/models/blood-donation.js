@@ -7,7 +7,7 @@ const bloodInfoSchema = new Schema(
     bloodGroup: {
       type: String,
       required: true,
-      enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+      enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-","Unspecificied"],
     },
     rhFactor: { type: String, required: true, enum: ["Positive", "Negative"] },
     volume: { type: Number, required: true }, // Measured in ml
