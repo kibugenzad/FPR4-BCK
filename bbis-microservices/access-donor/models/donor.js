@@ -113,7 +113,6 @@ const DonorSchema = new Schema(
     },
     identityDocNumberType:{
       type: String,
-      enum:["Passport ID", "National ID"],
       default:"National ID"
     },
     identityDocNumber:{
