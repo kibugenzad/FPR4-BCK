@@ -9,6 +9,7 @@ const {
 const eventEmitter = require("../commons/event/eventEmitter");
 class PreDonationAssessment {
   static buildQuery(filters) {
+    console.log("filters", filters);
     let query = { available: true }; // enforce availability
     query = filterDates(query, filters);
     query = filterIds(query, filters);
@@ -29,6 +30,12 @@ class PreDonationAssessment {
      query[key] = filters[key];
     };
 
+    // id 
+    if (filters.id) {
+      query['_id'] = filters.id;
+      // remove id from query
+      delete query.id;
+    }
     return query;
   }
 
@@ -58,10 +65,8 @@ class PreDonationAssessment {
 
   static async create(req) {
     const data = req.body;
-    const { donor } = data;
     const assessment = await Model.create(data);
-    eventEmitter.emit("donationCreated", { donor });
-
+    eventEmitter.emit("donationAppointmentCreated", { assessment });
     return assessment;
   }
 
