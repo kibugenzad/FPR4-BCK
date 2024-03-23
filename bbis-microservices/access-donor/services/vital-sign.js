@@ -33,6 +33,7 @@ class VitalSign {
     
         return Model.find(query)
         .populate({ path: "equipment" })
+        .populate({ path: "donor" })
         .sort(sort)
         .limit(limit)
         .skip(page ? limit * (page - 1) : 0);

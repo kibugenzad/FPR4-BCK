@@ -60,6 +60,7 @@ const DonorSchema = new Schema(
       unique: true,
       trim: true,
       lowercase: true,
+      required: [true, "Email field is required"],
     },
     phoneNumber: {
       type: String,
@@ -81,11 +82,6 @@ const DonorSchema = new Schema(
     donorNumber: {
       type: String,
       required: [true, "donorNumber field is required"],
-      unique: true,
-      trim: true,
-    },
-    username: {
-      type: String,
       unique: true,
       trim: true,
     },

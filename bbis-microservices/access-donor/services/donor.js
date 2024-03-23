@@ -20,6 +20,11 @@ class Donor {
     exactFields.forEach((field) => {
       processExactQuery(query, field, filters[field]);
     });
+    
+    // donorNumber case sensitive
+    if (query.donorNumber) {
+      query.donorNumber = {$regex: filters.donorNumber, $options: 'i'};
+    }
 
     return query;
   }

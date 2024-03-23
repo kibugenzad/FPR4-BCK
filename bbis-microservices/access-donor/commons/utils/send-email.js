@@ -30,7 +30,7 @@ class SendEmail {
     const html = await ejs.renderFile(
       path.join(__dirname, `../emailTemplate/${template}.ejs`),
       {
-        firstName: this.name,
+        name: this.name,
         url: this.url,
         message: this.message,
       }
@@ -61,6 +61,10 @@ class SendEmail {
 
   async sendDonation() {
     await this.send("donation", "Donation");
+  }
+
+  async donationAppointment() {
+    await this.send("donationAppointment", "Donation Appointment Scheduled");
   }
 
 
