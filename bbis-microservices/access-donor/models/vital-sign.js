@@ -30,9 +30,14 @@ const VitalSignSchema = new Schema(
           },
       
       ],
-     isEligible:{
-          type:Boolean,
-          default:false
+     eligible:{
+        isEligible:{
+            type:Boolean,
+            required:true
+        },
+        reason:{
+            type:String
+        }
      },
      equipment:{
       type:Schema.Types.ObjectId,
