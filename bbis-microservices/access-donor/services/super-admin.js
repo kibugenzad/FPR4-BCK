@@ -7,6 +7,7 @@ const {
   filterIds,
   processExactQuery,
 } = require("../commons/utils/general-filters");
+const generateToken = require("../commons/utils/generateToken");
 
 class SuperAdmin {
   static buildQuery(filters) {
@@ -77,15 +78,13 @@ class SuperAdmin {
     );
 
     if (match) {
-      let token = jwt.sign(
+      let token = generateToken(
         {
           id: user._id,
           accessRole: user.accessRole,
           accountType: "superAdmin",
-        },
-        config.secret,
-        { expiresIn: 60 * 60 * 24 }
-      ); // 24 hours
+        }
+      );
       let resp = {
         success: true,
         token: token,

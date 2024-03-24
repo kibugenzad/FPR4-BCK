@@ -8,6 +8,7 @@ const {
   processExactQuery,
 } = require("../commons/utils/general-filters");
 const eventEmitter = require("../commons/event/eventEmitter");
+const generateToken = require("../commons/utils/generateToken");
 
 class Donor {
   static buildQuery(filters) {
@@ -66,7 +67,7 @@ class Donor {
 
     const donor = await Model.create(userData);
      
-    eventEmitter.emit("accountCreated", userData);
+    eventEmitter.emit("donorCreated", donor);
 
     return donor;
   }
@@ -85,7 +86,8 @@ class Donor {
 
   static async authenticate(req) {
     const { email, password, passcode } = req.body;
-    const user = await Model.findOne({ email: email })
+    // sign in with email or identityDocNumber or donorNumber and password or passcode
+    const user = await Model.findOne({ $or: [{ email }, { identityDocNumber: email }, { donorNumber: email }]})
       .populate({ path: "accessRole" })
       .select("+password");
 
@@ -102,11 +104,7 @@ class Donor {
     );
 
     if (match) {
-      let token = jwt.sign(
-        { id: user._id, position: user.position, account_type: "donor" },
-        config.secret,
-        { expiresIn: 60 * 60 * 24 }
-      ); // 24 hours
+      let token = generateToken({ id: user._id, position: user.position, account_type: "donor",}); 
       let resp = {
         id: user._id,
         account_type: "donor",

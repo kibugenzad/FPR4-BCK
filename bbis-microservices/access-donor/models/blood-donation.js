@@ -38,7 +38,14 @@ const BloodDonationSchema = new Schema(
     startTime: { type: Date },
     endTime: { type: Date },
     reason: { type: String },
-    barcode:{}
+    barcode:{},
+    reaction:{
+      isReaction:{type:Boolean},
+      category:{type:String,
+      enum:["Mild","Moderate","Severe"]
+    },
+    comment:{type:String}
+    },
   },
   {
     timestamps: true, // Enables automatic creation of createdAt and updatedAt fields

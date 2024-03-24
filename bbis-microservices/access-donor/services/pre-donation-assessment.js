@@ -70,9 +70,13 @@ class PreDonationAssessment {
     return assessment;
   }
 
-  static update(req) {
+  static async update(req) {
     const { id } = req.body;
-    return Model.findByIdAndUpdate(id, req.body, { new: true });
+    const updatedData=await Model.findByIdAndUpdate(id, req.body, { new: true });
+    if(updatedData.status!=='pending'){
+      eventEmitter.emit("donationAppointmentApproved", { assessment:updatedData });
+    }
+    return  updatedData;
   }
 
   static delete(req) {

@@ -8,6 +8,7 @@ const {
   processExactQuery,
   processArrayQuery,
 } = require("../commons/utils/general-filters");
+const generateToken = require("../commons/utils/generateToken");
 
 class Account {
   static buildQuery(filters) {
@@ -98,7 +99,7 @@ class Account {
     );
 
     if (match) {
-      let token = jwt.sign(
+      let token = generateToken(
         {
           id: user._id,
           position: user.position,
@@ -107,10 +108,8 @@ class Account {
           accountType: user.outsideOrganization
             ? "acount-subApprover"
             : "account",
-        },
-        config.secret,
-        { expiresIn: 60 * 60 * 24 }
-      ); // 24 hours
+        }
+      );
       let resp = {
         success: true,
         token: token,
