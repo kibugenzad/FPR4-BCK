@@ -37,7 +37,6 @@ const VitalSignSchema = new Schema(
      equipment:{
       type:Schema.Types.ObjectId,
       ref:"Equipment",
-      
      },
      comment:[{
         account:{

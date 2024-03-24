@@ -9,10 +9,8 @@ const bloodInfoSchema = new Schema(
       required: true,
       enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-","Unspecificied"],
     },
-    rhFactor: { type: String, required: true, enum: ["Positive", "Negative"] },
     volume: { type: Number, required: true }, // Measured in ml
     tested: { type: Boolean, default: false }, // If the blood has been tested
-    expirationDate: { type: Date, required: true }, // Expiration date for the donated blood
   },
   {
     _id: false, // This line ensures that no additional ID is created for this sub-document
