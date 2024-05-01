@@ -6,6 +6,9 @@ const {
   processArrayQuery,
   processExactQuery,
 } = require("../commons/utils/general-filters");
+const eventEmitter = require("../commons/event/eventEmitter");
+const decodeToken = require("../commons/utils/decodeToken");
+const communityMember = require("../models/community-member");
 
 class Community {
   static buildQuery(filters) {
@@ -27,7 +30,7 @@ class Community {
     return query;
   }
 
-  static get(req) {
+  static async get(req) {
     const {
       limit = config.limit,
       page,
@@ -38,14 +41,47 @@ class Community {
 
     const sort = { [sortField]: sortOrder };
 
-    return Model.find(query)
+    const token = req.headers.authorization;
+    const { id: user } = decodeToken(token);
+
+    const myCommunities = await communityMember.find({ user });
+
+    const listCommunities = await Model.find(query)
       .sort(sort)
       .limit(limit)
       .skip(page ? limit * (page - 1) : 0);
+
+    const data = listCommunities.map((el) => {
+      const findCommunity = myCommunities.find(
+        (mel) => mel.community + "" === el._id + ""
+      );
+
+      if (findCommunity) {
+        return {
+          ...el._doc,
+          membership: "joined",
+          membershipDate: findCommunity.createdAt,
+        };
+      }
+
+      return el;
+    });
+
+    return data;
   }
 
-  static create(req) {
-    return Model.create(req.body);
+  static async create(req) {
+    const token = req.headers.authorization;
+    const { id: user } = decodeToken(token);
+
+    const dataInfo = await Model.create(req.body);
+
+    eventEmitter.emit("create-community", {
+      community: dataInfo._id,
+      user: user,
+    });
+
+    return dataInfo;
   }
 
   static update(req) {

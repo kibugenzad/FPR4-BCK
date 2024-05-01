@@ -113,6 +113,8 @@ class Account {
         email: user.email,
         phoneNumber: user.phoneNumber,
         accessRole: user.accessRole,
+        category: user.category,
+        registrationLevel: user.registrationLevel,
       };
       return resp;
     } else {

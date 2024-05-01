@@ -48,7 +48,10 @@ class LikePost {
   }
 
   static async create(req) {
-    const ownerLiked = await Model.find({ owner: req.body.owner });
+    const ownerLiked = await Model.find({
+      owner: req.body.owner,
+      post: req.body.post,
+    });
 
     if (ownerLiked.length > 0) {
       const likeData = await Model.findById({ _id: ownerLiked[0]._id });

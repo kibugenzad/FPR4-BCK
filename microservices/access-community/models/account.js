@@ -73,14 +73,18 @@ const AccountSchema = new Schema(
     address: addressSchema,
     category: {
       type: String,
-      default: "citizen",
-      enum: ["citizen", "diaspora", "foreign"],
+      default: "unclassified",
+      enum: ["citizen", "diaspora", "foreign", "foreign-in", "unclassified"],
     },
     following: {
       type: Number,
       default: 0,
     },
-    followed: {
+    follower: {
+      type: Number,
+      default: 0,
+    },
+    registrationLevel: {
       type: Number,
       default: 0,
     },

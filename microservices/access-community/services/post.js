@@ -1,6 +1,7 @@
 const Model = require("../models/post");
 const CommunityMembership = require("../models/community-member");
 const FriendRequest = require("../models/friend-request");
+const LikePost = require("../models/likePost");
 const decodeToken = require("../commons/utils/decodeToken");
 const config = require("../commons/config/app-config");
 const {
@@ -17,7 +18,7 @@ class Post {
     query = filterIds(query, filters);
 
     const arrayFields = ["community", "owner"];
-    const exactFields = ["owner"];
+    const exactFields = ["owner", "_id"];
 
     arrayFields.forEach((field) => {
       processArrayQuery(query, field, filters[field]);
@@ -30,7 +31,7 @@ class Post {
     return query;
   }
 
-  static get(req) {
+  static async get(req) {
     const {
       limit = config.limit,
       page,
@@ -41,12 +42,33 @@ class Post {
 
     const sort = { [sortField]: sortOrder };
 
-    return Model.find(query)
+    const likes = await LikePost.find();
+
+    const listPostData = await Model.find(query)
       .populate({ path: "owner" })
       .populate({ path: "community" })
       .sort(sort)
       .limit(limit)
       .skip(page ? limit * (page - 1) : 0);
+
+    const data = await Promise.all(
+      listPostData.map(async (el) => {
+        const likes = await LikePost.find({ post: el._id });
+
+        console.log("didieliked", likes);
+
+        if (likes.length > 0) {
+          return {
+            ...el._doc,
+            liked: true,
+          };
+        }
+
+        return el;
+      })
+    );
+
+    return data;
   }
 
   // static async getLatestPosts(req) {
@@ -79,6 +101,11 @@ class Post {
   // }
 
   static create(req) {
+    const token = req.headers.authorization;
+    const { id: user } = decodeToken(token);
+
+    req.body.owner = user;
+
     return Model.create(req.body);
   }
 

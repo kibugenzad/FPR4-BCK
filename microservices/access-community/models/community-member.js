@@ -13,10 +13,6 @@ const CommunityMembershipSchema = new Schema(
       ref: "Account",
       required: true,
     },
-    role: {
-      type: String,
-      default: "member",
-    },
     available: {
       type: Boolean,
       default: true,

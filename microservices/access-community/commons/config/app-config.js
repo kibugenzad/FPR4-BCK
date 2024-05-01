@@ -9,6 +9,8 @@ module.exports = {
   whitelistedUrls: [
     "/api/access/authentication/superadmin",
     "/api/access/authentication/superuser",
+    "/api/access/account",
+    "/api/access/forgot-password",
     "/api/access/authentication/account",
   ],
   authUrls: [

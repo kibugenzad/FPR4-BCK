@@ -1,4 +1,5 @@
-const Model = require("../models/comment");
+const Model = require("../models/story");
+const decodeToken = require("../commons/utils/decodeToken");
 const config = require("../commons/config/app-config");
 const {
   filterDates,
@@ -6,16 +7,15 @@ const {
   processArrayQuery,
   processExactQuery,
 } = require("../commons/utils/general-filters");
-const eventEmitter = require("../commons/event/eventEmitter");
 
-class Comment {
+class Post {
   static buildQuery(filters) {
     let query = { available: true }; // enforce availability
     query = filterDates(query, filters);
     query = filterIds(query, filters);
 
-    const arrayFields = ["post"];
-    const exactFields = ["owner", "post"];
+    const arrayFields = ["owner"];
+    const exactFields = ["owner", "_id"];
 
     arrayFields.forEach((field) => {
       processArrayQuery(query, field, filters[field]);
@@ -34,34 +34,27 @@ class Comment {
       page,
       sortField = "createdAt",
       sortOrder = -1,
-    } = req.body;
+    } = req.query;
     const query = this.buildQuery(req.query);
+
+    console.log("querydidier", query);
 
     const sort = { [sortField]: sortOrder };
 
     return Model.find(query)
       .populate({ path: "owner" })
-      .populate({ path: "post" })
       .sort(sort)
       .limit(limit)
       .skip(page ? limit * (page - 1) : 0);
   }
 
-  static async create(req) {
-    const commentData = await Model.create(req.body);
+  static create(req) {
+    const token = req.headers.authorization;
+    const { id: user } = decodeToken(token);
 
-    const commentInfo = await Model.findById({ _id: commentData._id })
-      .populate({ path: "owner" })
-      .populate({ path: "post" });
+    req.body.owner = user;
 
-    eventEmitter.emit("create-comment", {
-      post: commentData.post._id,
-      postOwner: commentInfo.post.owner,
-      commentOwner: commentInfo.owner,
-      message: commentData.content,
-    });
-
-    return commentInfo;
+    return Model.create(req.body);
   }
 
   static update(req) {
@@ -69,19 +62,10 @@ class Comment {
     return Model.findByIdAndUpdate(id, req.body, { new: true });
   }
 
-  static async delete(req) {
+  static delete(req) {
     const { id } = req.body;
-
-    const commentData = await Model.findById({ _id: id });
-
-    Model.findByIdAndDelete({ _id: id });
-
-    eventEmitter.emit("delete-comment", {
-      post: commentData.post,
-    });
-
-    return "deleted";
+    returnModel.findByIdAndDelete({ _id: id });
   }
 }
 
-module.exports = Comment;
+module.exports = Post;

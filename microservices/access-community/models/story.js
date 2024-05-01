@@ -1,27 +1,25 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const CommentSchema = new Schema(
+const StorySchema = new Schema(
   {
     owner: {
       type: Schema.Types.ObjectId,
       ref: "Account",
-      required: true,
-    },
-    post: {
-      type: Schema.Types.ObjectId,
-      ref: "Post",
-      required: true,
     },
     content: {
       type: String,
     },
     file: {
-      type: [String],
+      type: [],
     },
-    likes: {
-      type: Number,
-      default: 0,
+    read: {
+      type: Boolean,
+      default: false,
+    },
+    color: {
+      type: String,
+      default: "#000000",
     },
     available: {
       type: Boolean,
@@ -37,4 +35,4 @@ const CommentSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model("Comment", CommentSchema);
+module.exports = mongoose.model("Story", StorySchema);

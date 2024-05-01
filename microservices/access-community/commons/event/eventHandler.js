@@ -43,7 +43,7 @@ eventEmitter.on("friend-request", async (data) => {
           {
             _id: user,
           },
-          { $inc: { followed: 1 } }
+          { $inc: { follower: 1 } }
         );
 
         //follower update
@@ -209,4 +209,13 @@ eventEmitter.on("unlike-comment", async (data) => {
   );
 
   await likeComment.findByIdAndDelete({ _id: comment });
+});
+
+eventEmitter.on("create-community", async (data) => {
+  const { user, community } = data;
+
+  communityMembership.create({
+    user,
+    community,
+  });
 });
